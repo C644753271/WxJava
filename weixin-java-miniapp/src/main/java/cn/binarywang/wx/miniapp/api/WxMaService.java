@@ -377,18 +377,20 @@ public interface WxMaService extends WxService {
    */
   WxImgProcService getImgProcService();
 
-//  /**
-//   * 返回小程序交易组件-售后服务接口
-//   * @return
-//   */
-//  WxMaShopAfterSaleService getShopAfterSaleService();
-//
-//
-//  /**
-//   * 返回小程序交易组件-物流服务接口
-//   * @return
-//   */
-//  WxMaShopDeliveryService getShopDeliveryService();
+  /**
+   * 返回小程序交易组件-售后服务接口
+   *
+   * @return
+   */
+  WxMaShopAfterSaleService getShopAfterSaleService();
+
+
+  /**
+   * 返回小程序交易组件-物流服务接口
+   *
+   * @return
+   */
+  WxMaShopDeliveryService getShopDeliveryService();
 
 
   /**
@@ -432,6 +434,13 @@ public interface WxMaService extends WxService {
    * @return
    */
   WxMaShopImgService getShopImgService();
+
+  /**
+   * 小程序交易组件-接入商品前必需接口-审核相关接口
+   *
+   * @return
+   */
+  WxMaShopAuditService getShopAuditService();
 
   /**
    * 获取小程序 URL Link服务接口
