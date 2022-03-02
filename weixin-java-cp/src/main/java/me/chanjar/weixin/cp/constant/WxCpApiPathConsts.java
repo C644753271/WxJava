@@ -1,8 +1,6 @@
 package me.chanjar.weixin.cp.constant;
 
 
-import lombok.experimental.UtilityClass;
-
 /**
  * <pre>
  *  企业微信api地址常量类
@@ -118,6 +116,25 @@ public interface WxCpApiPathConsts {
     String COPY_TEMPLATE = "/cgi-bin/oa/approval/copytemplate";
   }
 
+  interface Living {
+    String GET_LIVING_CODE = "/cgi-bin/living/get_living_code";
+    String GET_LIVING_INFO = "/cgi-bin/living/get_living_info?livingid=";
+    String GET_WATCH_STAT = "/cgi-bin/living/get_watch_stat";
+    String GET_LIVING_SHARE_INFO = "/cgi-bin/living/get_living_share_info";
+    String GET_USER_ALL_LIVINGID = "/cgi-bin/living/get_user_all_livingid";
+
+    String CREATE = "/cgi-bin/living/create";
+    String MODIFY = "/cgi-bin/living/modify";
+    String CANCEL = "/cgi-bin/living/cancel";
+    String DELETE_REPLAY_DATA = "/cgi-bin/living/delete_replay_data";
+  }
+
+  interface MsgAudit {
+    String GET_PERMIT_USER_LIST = "/cgi-bin/msgaudit/get_permit_user_list";
+    String GET_GROUP_CHAT = "/cgi-bin/msgaudit/groupchat/get";
+    String CHECK_SINGLE_AGREE = "/cgi-bin/msgaudit/check_single_agree";
+  }
+
   interface Tag {
     String TAG_CREATE = "/cgi-bin/tag/create";
     String TAG_UPDATE = "/cgi-bin/tag/update";
@@ -222,6 +239,7 @@ public interface WxCpApiPathConsts {
     String GET_GROUP_MSG_SEND_RESULT = "/cgi-bin/externalcontact/get_groupmsg_send_result";
     String GET_GROUP_MSG_TASK = "/cgi-bin/externalcontact/get_groupmsg_task";
     String GET_GROUP_MSG_LIST_V2 = "/cgi-bin/externalcontact/get_groupmsg_list_v2";
+    String GET_GROUP_MSG_RESULT = "/cgi-bin/externalcontact/get_group_msg_result";
 
     String GET_PRODUCT_ALBUM = "/cgi-bin/externalcontact/get_product_album";
     String GET_PRODUCT_ALBUM_LIST = "/cgi-bin/externalcontact/get_product_album_list";
@@ -230,6 +248,30 @@ public interface WxCpApiPathConsts {
     String GROUP_WELCOME_TEMPLATE_EDIT = "/cgi-bin/externalcontact/group_welcome_template/edit";
     String GROUP_WELCOME_TEMPLATE_GET = "/cgi-bin/externalcontact/group_welcome_template/get";
     String GROUP_WELCOME_TEMPLATE_DEL = "/cgi-bin/externalcontact/group_welcome_template/del";
+
+    String UPLOAD_ATTACHMENT = "/cgi-bin/media/upload_attachment";
+
+  }
+
+  interface Kf {
+    String ACCOUNT_ADD = "/cgi-bin/kf/account/add";
+    String ACCOUNT_UPD = "/cgi-bin/kf/account/update";
+    String ACCOUNT_DEL = "/cgi-bin/kf/account/del";
+    String ACCOUNT_LIST = "/cgi-bin/kf/account/list";
+    String ADD_CONTACT_WAY = "/cgi-bin/kf/add_contact_way";
+
+    String SERVICER_ADD = "/cgi-bin/kf/servicer/add";
+    String SERVICER_DEL = "/cgi-bin/kf/servicer/del";
+    String SERVICER_LIST = "/cgi-bin/kf/servicer/list?open_kfid=";
+
+    String SERVICE_STATE_GET = "/cgi-bin/kf/service_state/get";
+    String SERVICE_STATE_TRANS = "/cgi-bin/kf/service_state/trans";
+
+    String SYNC_MSG = "/cgi-bin/kf/sync_msg";
+    String SEND_MSG = "/cgi-bin/kf/send_msg";
+
+    String SEND_MSG_ON_EVENT = "/cgi-bin/kf/send_msg_on_event";
+    String CUSTOMER_BATCH_GET = "/cgi-bin/kf/customer/batchget";
 
   }
 }

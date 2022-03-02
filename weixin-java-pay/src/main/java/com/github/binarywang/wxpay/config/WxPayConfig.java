@@ -1,6 +1,7 @@
 package com.github.binarywang.wxpay.config;
 
 import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.util.HttpProxyUtils;
 import com.github.binarywang.wxpay.util.ResourcesUtils;
 import com.github.binarywang.wxpay.v3.WxPayV3HttpClientBuilder;
 import com.github.binarywang.wxpay.v3.auth.*;
@@ -9,7 +10,13 @@ import lombok.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.ssl.SSLContexts;
 
 import javax.net.ssl.SSLContext;
@@ -254,16 +261,22 @@ public class WxPayConfig {
       if(StringUtils.isBlank(serialNo)){
         this.certSerialNo = certificate.getSerialNumber().toString(16).toUpperCase();
       }
+      //构造Http Proxy正向代理
+      WxPayHttpProxy wxPayHttpProxy = getWxPayHttpProxy();
 
       AutoUpdateCertificatesVerifier verifier = new AutoUpdateCertificatesVerifier(
         new WxPayCredentials(mchId, new PrivateKeySigner(certSerialNo, merchantPrivateKey)),
-        apiV3Key.getBytes(StandardCharsets.UTF_8), this.getCertAutoUpdateTime());
+        apiV3Key.getBytes(StandardCharsets.UTF_8), this.getCertAutoUpdateTime(),wxPayHttpProxy);
 
-      CloseableHttpClient httpClient = WxPayV3HttpClientBuilder.create()
+      WxPayV3HttpClientBuilder wxPayV3HttpClientBuilder = WxPayV3HttpClientBuilder.create()
         .withMerchant(mchId, certSerialNo, merchantPrivateKey)
         .withWechatpay(Collections.singletonList(certificate))
-        .withValidator(new WxPayValidator(verifier))
-        .build();
+        .withValidator(new WxPayValidator(verifier));
+      //初始化V3接口正向代理设置
+      HttpProxyUtils.initHttpProxy(wxPayV3HttpClientBuilder,wxPayHttpProxy);
+
+      CloseableHttpClient httpClient = wxPayV3HttpClientBuilder.build();
+
       this.apiV3HttpClient = httpClient;
       this.verifier=verifier;
       this.privateKey = merchantPrivateKey;
@@ -274,7 +287,16 @@ public class WxPayConfig {
     }
   }
 
-
+  /**
+   * 初始化一个WxPayHttpProxy对象
+   * @return 返回封装的WxPayHttpProxy对象。如未指定代理主机和端口，则默认返回null
+   */
+  private WxPayHttpProxy getWxPayHttpProxy() {
+    if (StringUtils.isNotBlank(this.getHttpProxyHost()) && this.getHttpProxyPort() > 0) {
+      return new WxPayHttpProxy(getHttpProxyHost(), getHttpProxyPort(), getHttpProxyUsername(), getHttpProxyPassword());
+    }
+    return null;
+  }
 
   private InputStream loadConfigInputStream(String configPath, byte[] configContent, String fileName) throws WxPayException {
     InputStream inputStream;

@@ -1,6 +1,10 @@
 package me.chanjar.weixin.cp.api;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import lombok.NonNull;
+import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.bean.WxCpBaseResp;
 import me.chanjar.weixin.cp.bean.external.*;
@@ -820,6 +824,20 @@ public interface WxCpExternalContactService {
 
   /**
    * <pre>
+   * 企业跟第三方应用可通过该接口获取到创建企业群发的群发发送结果。
+   * https://work.weixin.qq.com/api/doc/16251
+   * </pre>
+   *
+   * @param msgid  群发消息的id，通过创建企业群发接口返回
+   * @param limit  返回的最大记录数，整型，最大值10000，默认值10000
+   * @param cursor 用于分页查询的游标，字符串类型，由上一次调用返回，首次调用可不填
+   * @return wx cp base resp
+   * @throws WxErrorException the wx error exception
+   */
+  public WxCpGroupMsgResult getGroupMsgResult(String msgid, Integer limit, String cursor) throws WxErrorException;
+
+  /**
+   * <pre>
    * 获取群发成员发送任务列表。
    * https://work.weixin.qq.com/api/doc/90000/90135/93338#获取群发成员发送任务列表
    * </pre>
@@ -906,6 +924,36 @@ public interface WxCpExternalContactService {
    * @throws WxErrorException the wx error exception
    */
   WxCpProductAlbumResult getProductAlbum(String productId) throws WxErrorException;
+
+  /**
+   * <pre>
+   * 上传附件资源
+   * https://open.work.weixin.qq.com/api/doc/90001/90143/95178
+   * </pre>
+   * @param mediaType
+   * @param fileType
+   * @param attachmentType
+   * @param inputStream
+   * @return
+   * @throws WxErrorException
+   * @throws IOException
+   */
+  WxMediaUploadResult uploadAttachment(String mediaType, String fileType, Integer attachmentType,
+    InputStream inputStream) throws WxErrorException, IOException;
+
+  /**
+   * <pre>
+   * 上传附件资源
+   * https://open.work.weixin.qq.com/api/doc/90001/90143/95178
+   * </pre>
+   * @param mediaType
+   * @param attachmentType
+   * @param file
+   * @return
+   * @throws WxErrorException
+   */
+  WxMediaUploadResult uploadAttachment(String mediaType, Integer attachmentType, File file)
+    throws WxErrorException;
 
 
 }

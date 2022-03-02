@@ -2,12 +2,19 @@ package me.chanjar.weixin.cp.api.impl;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxCpErrorMsgEnum;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.error.WxRuntimeException;
 import me.chanjar.weixin.common.util.BeanUtils;
+import me.chanjar.weixin.common.util.fs.FileUtils;
+import me.chanjar.weixin.common.util.http.MediaUploadRequestExecutor;
 import me.chanjar.weixin.common.util.json.GsonParser;
 import me.chanjar.weixin.cp.api.WxCpExternalContactService;
 import me.chanjar.weixin.cp.api.WxCpService;
@@ -650,6 +657,30 @@ public class WxCpExternalContactServiceImpl implements WxCpExternalContactServic
 
   /**
    * <pre>
+   * 企业跟第三方应用可通过该接口获取到创建企业群发的群发发送结果。
+   * https://work.weixin.qq.com/api/doc/16251
+   * </pre>
+   *
+   * @param msgid  群发消息的id，通过创建企业群发接口返回
+   * @param limit  返回的最大记录数，整型，最大值10000，默认值10000
+   * @param cursor 用于分页查询的游标，字符串类型，由上一次调用返回，首次调用可不填
+   * @return wx cp base resp
+   * @throws WxErrorException the wx error exception
+   */
+  @Override
+  public WxCpGroupMsgResult getGroupMsgResult(String msgid, Integer limit, String cursor) throws WxErrorException {
+    JsonObject json = new JsonObject();
+    json.addProperty("msgid", msgid);
+    json.addProperty("limit", limit);
+    json.addProperty("cursor", cursor);
+
+    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_GROUP_MSG_RESULT);
+    final String result = this.mainService.post(url, json.toString());
+    return WxCpGroupMsgResult.fromJson(result);
+  }
+
+  /**
+   * <pre>
    * 获取群发成员发送任务列表。
    * https://work.weixin.qq.com/api/doc/90000/90135/93338#获取群发成员发送任务列表
    * </pre>
@@ -790,4 +821,19 @@ public class WxCpExternalContactServiceImpl implements WxCpExternalContactServic
     return WxCpProductAlbumResult.fromJson(result);
   }
 
+  @Override
+  public WxMediaUploadResult uploadAttachment(String mediaType, String fileType, Integer attachmentType,
+    InputStream inputStream) throws WxErrorException, IOException {
+    return uploadAttachment(mediaType, attachmentType, FileUtils.createTmpFile(inputStream,
+      UUID.randomUUID().toString(), fileType));
+  }
+
+  @Override
+  public WxMediaUploadResult uploadAttachment(String mediaType, Integer attachmentType, File file)
+    throws WxErrorException {
+    String params = "?media_type=" + mediaType + "&attachment_type=" + attachmentType;
+    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(UPLOAD_ATTACHMENT + params);
+    return this.mainService.execute(MediaUploadRequestExecutor.create(
+      this.mainService.getRequestHttp()), url, file);
+  }
 }

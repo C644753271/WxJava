@@ -5,16 +5,17 @@ import me.chanjar.weixin.cp.bean.message.WxCpMessage;
 import me.chanjar.weixin.cp.bean.templatecard.*;
 
 import java.util.List;
+
 /**
  * <pre>
  * 模板卡片消息Builder
  * 用法: WxCustomMessage m = WxCustomMessage.TEMPLATECARD().title(...)....toUser(...).build();
  * </pre>
  *
- * @author yzts</a>
+ * @author yzts</ a>
  * @date 2019-05-16
  */
-public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
+public class TemplateCardBuilder extends BaseBuilder<TemplateCardBuilder> {
   /**
    * 模板卡片类型，文本通知型卡片填写 “text_notice”,
    * 图文展示型卡片此处填写 “news_notice”,
@@ -88,7 +89,7 @@ public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
    * 整体卡片的点击跳转事件，text_notice必填本字段
    * 跳转事件类型，1 代表跳转url，2 代表打开小程序。text_notice卡片模版中该字段取值范围为[1,2]
    */
-  private Integer  card_action_type;
+  private Integer card_action_type;
   /**
    * 跳转事件的url，card_action.type是1时必填
    */
@@ -146,6 +147,11 @@ public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
    */
   private List<MultipleSelect> selects;
 
+  /**
+   * 引用文献样式
+   */
+  private QuoteArea quoteArea;
+
 
   public TemplateCardBuilder() {
     this.msgType = WxConsts.KefuMsgType.TEMPLATE_CARD;
@@ -191,7 +197,7 @@ public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
     return this;
   }
 
-  public TemplateCardBuilder  vertical_contents(List<VerticalContent> vertical_contents) {
+  public TemplateCardBuilder vertical_contents(List<VerticalContent> vertical_contents) {
     this.vertical_contents = vertical_contents;
     return this;
   }
@@ -266,6 +272,11 @@ public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
     return this;
   }
 
+  public TemplateCardBuilder quoteArea(QuoteArea quoteArea) {
+    this.quoteArea = quoteArea;
+    return this;
+  }
+
   @Override
   public WxCpMessage build() {
     WxCpMessage m = super.build();
@@ -295,6 +306,7 @@ public class TemplateCardBuilder  extends BaseBuilder<TemplateCardBuilder>{
     m.setSubmit_button_text(this.submit_button_text);
     m.setSubmit_button_key(this.submit_button_key);
     m.setSelects(this.selects);
+    m.setQuoteArea(this.quoteArea);
     return m;
   }
 }
