@@ -16,6 +16,7 @@ public interface WxCpApiPathConsts {
   String GET_AGENT_CONFIG_TICKET = "/cgi-bin/ticket/get?&type=agent_config";
   String GET_CALLBACK_IP = "/cgi-bin/getcallbackip";
   String BATCH_REPLACE_PARTY = "/cgi-bin/batch/replaceparty";
+  String BATCH_SYNC_USER = "/cgi-bin/batch/syncuser";
   String BATCH_REPLACE_USER = "/cgi-bin/batch/replaceuser";
   String BATCH_GET_RESULT = "/cgi-bin/batch/getresult?jobid=";
   String JSCODE_TO_SESSION = "/cgi-bin/miniprogram/jscode2session";
@@ -71,8 +72,10 @@ public interface WxCpApiPathConsts {
   interface Department {
     String DEPARTMENT_CREATE = "/cgi-bin/department/create";
     String DEPARTMENT_UPDATE = "/cgi-bin/department/update";
+    String DEPARTMENT_GET = "/cgi-bin/department/get?id=%d";
     String DEPARTMENT_DELETE = "/cgi-bin/department/delete?id=%d";
     String DEPARTMENT_LIST = "/cgi-bin/department/list";
+    String DEPARTMENT_SIMPLE_LIST = "/cgi-bin/department/simplelist";
   }
 
   interface Media {
@@ -89,6 +92,10 @@ public interface WxCpApiPathConsts {
   }
 
   interface Oa {
+    /**
+     * 打卡
+     * https://developer.work.weixin.qq.com/document/path/94204
+     */
     String GET_CORP_CHECKIN_OPTION = "/cgi-bin/checkin/getcorpcheckinoption";
     String GET_CHECKIN_DATA = "/cgi-bin/checkin/getcheckindata";
     String GET_CHECKIN_OPTION = "/cgi-bin/checkin/getcheckinoption";
@@ -96,12 +103,33 @@ public interface WxCpApiPathConsts {
     String GET_CHECKIN_MONTH_DATA = "/cgi-bin/checkin/getcheckin_monthdata";
     String GET_CHECKIN_SCHEDULE_DATA = "/cgi-bin/checkin/getcheckinschedulist";
     String SET_CHECKIN_SCHEDULE_DATA = "/cgi-bin/checkin/setcheckinschedulist";
-    String GET_APPROVAL_INFO = "/cgi-bin/oa/getapprovalinfo";
-    String GET_APPROVAL_DETAIL = "/cgi-bin/oa/getapprovaldetail";
-    String GET_DIAL_RECORD = "/cgi-bin/dial/get_dial_record";
+    String ADD_CHECK_IN_USER_FACE = "/cgi-bin/checkin/addcheckinuserface";
+
+    /**
+     * 审批
+     * https://developer.work.weixin.qq.com/document/path/91956
+     */
+    String COPY_TEMPLATE = "/cgi-bin/oa/approval/copytemplate";
     String GET_TEMPLATE_DETAIL = "/cgi-bin/oa/gettemplatedetail";
     String APPLY_EVENT = "/cgi-bin/oa/applyevent";
+    String GET_APPROVAL_INFO = "/cgi-bin/oa/getapprovalinfo";
+    String GET_APPROVAL_DETAIL = "/cgi-bin/oa/getapprovaldetail";
+    String GET_APPROVAL_DATA = "/cgi-bin/oa/getapprovaldata";
 
+    String GET_CORP_CONF = "/cgi-bin/oa/vacation/getcorpconf";
+    String GET_USER_VACATION_QUOTA = "/cgi-bin/oa/vacation/getuservacationquota";
+    String SET_ONE_USER_QUOTA = "/cgi-bin/oa/vacation/setoneuserquota";
+
+    /**
+     * 公费电话
+     * https://developer.work.weixin.qq.com/document/path/93662
+     */
+    String GET_DIAL_RECORD = "/cgi-bin/dial/get_dial_record";
+
+    /**
+     * 日程
+     * https://developer.work.weixin.qq.com/document/path/93624
+     */
     String CALENDAR_ADD = "/cgi-bin/oa/calendar/add";
     String CALENDAR_UPDATE = "/cgi-bin/oa/calendar/update";
     String CALENDAR_GET = "/cgi-bin/oa/calendar/get";
@@ -113,7 +141,19 @@ public interface WxCpApiPathConsts {
     String SCHEDULE_DEL = "/cgi-bin/oa/schedule/del";
     String SCHEDULE_LIST = "/cgi-bin/oa/schedule/get_by_calendar";
 
-    String COPY_TEMPLATE = "/cgi-bin/oa/approval/copytemplate";
+    /**
+     * 微盘
+     * https://developer.work.weixin.qq.com/document/path/93654
+     */
+    String SPACE_CREATE = "/cgi-bin/wedrive/space_create";
+    String SPACE_RENAME = "/cgi-bin/wedrive/space_rename";
+    String SPACE_DISMISS = "/cgi-bin/wedrive/space_dismiss";
+
+    /**
+     * 审批流程引擎
+     * https://developer.work.weixin.qq.com/document/path/90269
+     */
+    String GET_OPEN_APPROVAL_DATA = "/cgi-bin/corp/getopenapprovaldata";
   }
 
   interface Living {
@@ -147,6 +187,7 @@ public interface WxCpApiPathConsts {
 
   interface TaskCard {
     String UPDATE_TASK_CARD = "/cgi-bin/message/update_taskcard";
+    String UPDATE_TEMPLATE_CARD = "/cgi-bin/message/update_template_card";
   }
 
   interface Tp {
@@ -167,6 +208,15 @@ public interface WxCpApiPathConsts {
     String CONTACT_SEARCH = "/cgi-bin/service/contact/search";
     String GET_ADMIN_LIST = "/cgi-bin/service/get_admin_list";
 
+    // 获取订单详情
+    String GET_ORDER = "/cgi-bin/service/get_order";
+
+    // 获取订单列表
+    String GET_ORDER_LIST = "/cgi-bin/service/get_order_list";
+
+    // 延长试用期
+    String PROLONG_TRY = "/cgi-bin/service/prolong_try";
+
   }
 
   interface User {
@@ -184,6 +234,7 @@ public interface WxCpApiPathConsts {
     String GET_USER_ID = "/cgi-bin/user/getuserid";
     String GET_EXTERNAL_CONTACT = "/cgi-bin/crm/get_external_contact?external_userid=";
     String GET_JOIN_QR_CODE = "/cgi-bin/corp/get_join_qrcode?size_type=";
+    String GET_ACTIVE_STAT = "/cgi-bin/user/get_active_stat";
   }
 
   interface ExternalContact {
@@ -241,8 +292,12 @@ public interface WxCpApiPathConsts {
     String GET_GROUP_MSG_LIST_V2 = "/cgi-bin/externalcontact/get_groupmsg_list_v2";
     String GET_GROUP_MSG_RESULT = "/cgi-bin/externalcontact/get_group_msg_result";
 
+
     String GET_PRODUCT_ALBUM = "/cgi-bin/externalcontact/get_product_album";
     String GET_PRODUCT_ALBUM_LIST = "/cgi-bin/externalcontact/get_product_album_list";
+    String ADD_PRODUCT_ALBUM = "/cgi-bin/externalcontact/add_product_album";
+    String UPDATE_PRODUCT_ALBUM = "/cgi-bin/externalcontact/update_product_album";
+    String DELETE_PRODUCT_ALBUM = "/cgi-bin/externalcontact/delete_product_album";
 
     String GROUP_WELCOME_TEMPLATE_ADD = "/cgi-bin/externalcontact/group_welcome_template/add";
     String GROUP_WELCOME_TEMPLATE_EDIT = "/cgi-bin/externalcontact/group_welcome_template/edit";
@@ -250,6 +305,11 @@ public interface WxCpApiPathConsts {
     String GROUP_WELCOME_TEMPLATE_DEL = "/cgi-bin/externalcontact/group_welcome_template/del";
 
     String UPLOAD_ATTACHMENT = "/cgi-bin/media/upload_attachment";
+
+
+    String ADD_INTERCEPT_RULE = "/cgi-bin/externalcontact/add_intercept_rule";
+    String UPDATE_INTERCEPT_RULE = "/cgi-bin/externalcontact/update_intercept_rule";
+    String DEL_INTERCEPT_RULE = "/cgi-bin/externalcontact/del_intercept_rule";
 
   }
 
@@ -272,6 +332,15 @@ public interface WxCpApiPathConsts {
 
     String SEND_MSG_ON_EVENT = "/cgi-bin/kf/send_msg_on_event";
     String CUSTOMER_BATCH_GET = "/cgi-bin/kf/customer/batchget";
+    String GET_CORP_STATISTIC = "/cgi-bin/kf/get_corp_statistic";
 
+  }
+
+  interface Export {
+    String SIMPLE_USER = "/cgi-bin/export/simple_user";
+    String USER = "/cgi-bin/export/user";
+    String DEPARTMENT = "/cgi-bin/export/department";
+    String TAG_USER = "/cgi-bin/export/taguser";
+    String GET_RESULT = "/cgi-bin/export/get_result?jobid=%s";
   }
 }

@@ -1,17 +1,16 @@
 package me.chanjar.weixin.cp.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import lombok.NonNull;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.bean.WxCpBaseResp;
 import me.chanjar.weixin.cp.bean.external.*;
 import me.chanjar.weixin.cp.bean.external.contact.*;
-import me.chanjar.weixin.cp.bean.oa.WxCpApprovalInfoQueryFilter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -361,14 +360,19 @@ public interface WxCpExternalContactService {
   List<String> listFollowers() throws WxErrorException;
 
   /**
-   * 企业和第三方可通过此接口，获取所有离职成员的客户列表，并可进一步调用离职成员的外部联系人再分配接口将这些客户重新分配给其他企业成员。
+   * 获取待分配的离职成员列表
+   * 企业和第三方可通过此接口，获取所有离职成员的客户列表，并可进一步调用分配离职成员的客户接口将这些客户重新分配给其他企业成员。
    *
-   * @param page     the page
-   * @param pageSize the page size
-   * @return wx cp user external unassign list
-   * @throws WxErrorException the wx error exception
+   * 请求方式：POST（HTTPS）
+   * 请求地址：https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get_unassigned_list?access_token=ACCESS_TOKEN
+   *
+   * @param pageId 分页查询，要查询页号，从0开始
+   * @param cursor 分页查询游标，字符串类型，适用于数据量较大的情况，如果使用该参数则无需填写page_id，该参数由上一次调用返回
+   * @param pageSize 每次返回的最大记录数，默认为1000，最大值为1000
+   * @return
+   * @throws WxErrorException
    */
-  WxCpUserExternalUnassignList listUnassignedList(Integer page, Integer pageSize) throws WxErrorException;
+  WxCpUserExternalUnassignList listUnassignedList(Integer pageId, String cursor, Integer pageSize) throws WxErrorException;
 
   /**
    * 企业可通过此接口，将已离职成员的外部联系人分配给另一个成员接替联系。
@@ -955,5 +959,70 @@ public interface WxCpExternalContactService {
   WxMediaUploadResult uploadAttachment(String mediaType, Integer attachmentType, File file)
     throws WxErrorException;
 
+  /**
+   * <pre>
+   * 新建敏感词规则
+   * 企业和第三方应用可以通过此接口新建敏感词规则
+   * 请求方式：POST(HTTPS)
+   * 请求地址：https://qyapi.weixin.qq.com/cgi-bin/externalcontact/add_intercept_rule?access_token=ACCESS_TOKEN
+   * <pre>
+   */
+  WxCpInterceptRuleResultResp addInterceptRule(WxCpInterceptRuleResp ruleResp) throws  WxErrorException;
+  /**
+   * <pre>
+   * 修改敏感词规则
+   * 企业和第三方应用可以通过此接口修改敏感词规则
+   * 请求方式：POST(HTTPS)
+   * 请求地址：https://qyapi.weixin.qq.com/cgi-bin/externalcontact/update_intercept_rule?access_token=ACCESS_TOKEN
+   * <pre>
+   */
+  WxCpInterceptRuleResultResp updateInterceptRule(WxCpInterceptRuleResp ruleResp) throws WxErrorException;
 
+  /**
+   * <pre>
+   * 删除敏感词规则
+   * 企业和第三方应用可以通过此接口修改敏感词规则
+   * 请求方式：POST(HTTPS)
+   * 请求地址：https://qyapi.weixin.qq.com/cgi-bin/externalcontact/del_intercept_rule?access_token=ACCESS_TOKEN
+   * <pre>
+   * @param rule_id 规则id
+   */
+  WxCpBaseResp delInterceptRule(String rule_id) throws WxErrorException;
+
+  /**
+   * <pre>
+   * 创建商品图册
+   * 企业和第三方应用可以通过此接口增加商品
+   * 请求方式：POST(HTTPS)
+   * 请求地址：<a href="https://qyapi.weixin.qq.com/cgi-bin/externalcontact/add_product_album?access_token=ACCESS_TOKEN">https://qyapi.weixin.qq.com/cgi-bin/externalcontact/add_product_album?access_token=ACCESS_TOKEN</a>
+   * 文档地址：<a href="https://developer.work.weixin.qq.com/document/path/95096#%E5%88%9B%E5%BB%BA%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C">https://developer.work.weixin.qq.com/document/path/95096#%E5%88%9B%E5%BB%BA%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C</a>
+   * <pre>
+   * @param wxCpProductAlbumInfo 商品图册信息
+   * @return 商品id
+   */
+  String addProductAlbum(WxCpProductAlbumInfo wxCpProductAlbumInfo) throws WxErrorException;
+
+  /**
+   * <pre>
+   * 编辑商品图册
+   * 企业和第三方应用可以通过此接口修改商品信息
+   * 请求方式：POST(HTTPS)
+   * 请求地址：<a href="https://qyapi.weixin.qq.com/cgi-bin/externalcontact/update_product_album?access_token=ACCESS_TOKEN">https://qyapi.weixin.qq.com/cgi-bin/externalcontact/update_product_album?access_token=ACCESS_TOKEN</a>
+   * 文档地址：<a href="https://developer.work.weixin.qq.com/document/path/95096#%E7%BC%96%E8%BE%91%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C">https://developer.work.weixin.qq.com/document/path/95096#%E7%BC%96%E8%BE%91%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C</a>
+   * <pre>
+   * @param wxCpProductAlbumInfo 商品图册信息
+   */
+  void updateProductAlbum(WxCpProductAlbumInfo wxCpProductAlbumInfo) throws WxErrorException;
+
+  /**
+   * <pre>
+   * 删除商品图册
+   * 企业和第三方应用可以通过此接口删除商品信息
+   * 请求方式：POST(HTTPS)
+   * 请求地址：<a href="https://qyapi.weixin.qq.com/cgi-bin/externalcontact/delete_product_album?access_token=ACCESS_TOKEN">https://qyapi.weixin.qq.com/cgi-bin/externalcontact/delete_product_album?access_token=ACCESS_TOKEN</a>
+   * 文档地址：<a href="https://developer.work.weixin.qq.com/document/path/95096#%E5%88%A0%E9%99%A4%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C">https://developer.work.weixin.qq.com/document/path/95096#%E5%88%A0%E9%99%A4%E5%95%86%E5%93%81%E5%9B%BE%E5%86%8C</a>
+   * <pre>
+   * @param productId 商品id
+   */
+  void deleteProductAlbum(String productId) throws WxErrorException;
 }
