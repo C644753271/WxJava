@@ -148,6 +148,23 @@ public interface WxCpApiPathConsts {
     String SPACE_CREATE = "/cgi-bin/wedrive/space_create";
     String SPACE_RENAME = "/cgi-bin/wedrive/space_rename";
     String SPACE_DISMISS = "/cgi-bin/wedrive/space_dismiss";
+    String SPACE_INFO = "/cgi-bin/wedrive/space_info";
+    String SPACE_ACL_ADD = "/cgi-bin/wedrive/space_acl_add";
+    String SPACE_ACL_DEL = "/cgi-bin/wedrive/space_acl_del";
+    String SPACE_SETTING = "/cgi-bin/wedrive/space_setting";
+    String SPACE_SHARE = "/cgi-bin/wedrive/space_share";
+    String FILE_LIST = "/cgi-bin/wedrive/file_list";
+    String FILE_UPLOAD = "/cgi-bin/wedrive/file_upload";
+    String FILE_DOWNLOAD = "/cgi-bin/wedrive/file_download";
+    String FILE_RENAME = "/cgi-bin/wedrive/file_rename";
+    String FILE_CREATE = "/cgi-bin/wedrive/file_create";
+    String FILE_MOVE = "/cgi-bin/wedrive/file_move";
+    String FILE_DELETE = "/cgi-bin/wedrive/file_delete";
+    String FILE_INFO = "/cgi-bin/wedrive/file_info";
+    String FILE_ACL_ADD = "/cgi-bin/wedrive/file_acl_add";
+    String FILE_ACL_DEL = "/cgi-bin/wedrive/file_acl_del";
+    String FILE_SETTING = "/cgi-bin/wedrive/file_setting";
+    String FILE_SHARE = "/cgi-bin/wedrive/file_share";
 
     /**
      * 审批流程引擎
@@ -258,6 +275,7 @@ public interface WxCpApiPathConsts {
     String UPDATE_REMARK = "/cgi-bin/externalcontact/remark";
     String LIST_EXTERNAL_CONTACT = "/cgi-bin/externalcontact/list?userid=";
     String LIST_UNASSIGNED_CONTACT = "/cgi-bin/externalcontact/get_unassigned_list";
+
     @Deprecated
     String TRANSFER_UNASSIGNED_CONTACT = "/cgi-bin/externalcontact/transfer";
     String TRANSFER_CUSTOMER = "/cgi-bin/externalcontact/transfer_customer";
@@ -270,6 +288,10 @@ public interface WxCpApiPathConsts {
     String GROUP_CHAT_TRANSFER = "/cgi-bin/externalcontact/groupchat/transfer";
     String LIST_USER_BEHAVIOR_DATA = "/cgi-bin/externalcontact/get_user_behavior_data";
     String LIST_GROUP_CHAT_DATA = "/cgi-bin/externalcontact/groupchat/statistic";
+    String ADD_JOIN_WAY = "/cgi-bin/externalcontact/groupchat/add_join_way";
+    String GET_JOIN_WAY = "/cgi-bin/externalcontact/groupchat/get_join_way";
+    String UPDATE_JOIN_WAY = "/cgi-bin/externalcontact/groupchat/update_join_way";
+    String DEL_JOIN_WAY = "/cgi-bin/externalcontact/groupchat/del_join_way";
     String ADD_MSG_TEMPLATE = "/cgi-bin/externalcontact/add_msg_template";
     String SEND_WELCOME_MSG = "/cgi-bin/externalcontact/send_welcome_msg";
 
