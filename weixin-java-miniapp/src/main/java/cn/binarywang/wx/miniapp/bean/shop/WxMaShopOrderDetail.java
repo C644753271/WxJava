@@ -14,6 +14,7 @@ import java.util.List;
 public class WxMaShopOrderDetail implements Serializable {
   private static final long serialVersionUID = 3325843289672341160L;
 
+
   /**
    * 推广员、分享员信息
    */

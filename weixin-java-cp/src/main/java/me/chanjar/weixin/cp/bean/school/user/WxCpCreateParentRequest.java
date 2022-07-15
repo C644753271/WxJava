@@ -36,6 +36,9 @@ public class WxCpCreateParentRequest implements Serializable {
 
   @Setter
   @Getter
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Children implements Serializable {
 
     @SerializedName("student_userid")
