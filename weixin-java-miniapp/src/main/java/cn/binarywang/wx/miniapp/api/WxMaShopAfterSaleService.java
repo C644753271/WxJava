@@ -1,16 +1,7 @@
 package cn.binarywang.wx.miniapp.api;
 
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAcceptReturnRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleAddRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleGetRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleListRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleUpdateRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleUploadReturnInfoRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopUploadCerficatesRequest;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleAddResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleGetResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleListResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopBaseResponse;
+import cn.binarywang.wx.miniapp.bean.shop.request.*;
+import cn.binarywang.wx.miniapp.bean.shop.response.*;
 import me.chanjar.weixin.common.error.WxErrorException;
 
 /**
@@ -39,6 +30,15 @@ public interface WxMaShopAfterSaleService {
   WxMaShopAfterSaleGetResponse get(WxMaShopAfterSaleGetRequest request) throws WxErrorException;
 
   /**
+   * 获取售后单详情(EC版)
+   *
+   * @param request
+   * @return WxMaShopEcAfterSaleGetResponse
+   * @throws WxErrorException
+   */
+  WxMaShopEcAfterSaleGetResponse get(WxMaShopEcAfterSaleGetRequest request) throws WxErrorException;
+
+  /**
    * 更新售后
    *
    * @param request
@@ -46,6 +46,16 @@ public interface WxMaShopAfterSaleService {
    * @throws WxErrorException
    */
   WxMaShopBaseResponse update(WxMaShopAfterSaleUpdateRequest request) throws WxErrorException;
+
+  /**
+   * 更新售后(EC版)
+   *
+   * @param request
+   * @return WxMaShopBaseResponse
+   * @throws WxErrorException
+   */
+  WxMaShopBaseResponse update(WxMaShopEcAfterSaleUpdateRequest request) throws WxErrorException;
+
 
   /**
    * 用户取消售后申请

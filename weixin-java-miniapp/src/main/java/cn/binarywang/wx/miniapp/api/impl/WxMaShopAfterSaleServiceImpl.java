@@ -2,17 +2,8 @@ package cn.binarywang.wx.miniapp.api.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.WxMaShopAfterSaleService;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAcceptReturnRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleAddRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleGetRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleListRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleUpdateRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopAfterSaleUploadReturnInfoRequest;
-import cn.binarywang.wx.miniapp.bean.shop.request.WxMaShopUploadCerficatesRequest;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleAddResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleGetResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopAfterSaleListResponse;
-import cn.binarywang.wx.miniapp.bean.shop.response.WxMaShopBaseResponse;
+import cn.binarywang.wx.miniapp.bean.shop.request.*;
+import cn.binarywang.wx.miniapp.bean.shop.response.*;
 import cn.binarywang.wx.miniapp.json.WxMaGsonBuilder;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +62,23 @@ public class WxMaShopAfterSaleServiceImpl implements WxMaShopAfterSaleService {
   }
 
   /**
+   * 获取售后单详情(EC版)
+   *
+   * @param request
+   * @return WxMaShopEcAfterSaleGetResponse
+   * @throws WxErrorException
+   */
+  @Override
+  public WxMaShopEcAfterSaleGetResponse get(WxMaShopEcAfterSaleGetRequest request) throws WxErrorException {
+    String responseContent = this.wxMaService.post(ECAFTERSALE_GET, request);
+    JsonObject jsonObject = GsonParser.parse(responseContent);
+    if (jsonObject.get(ERRCODE).getAsInt() != 0) {
+      throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
+    }
+    return WxMaGsonBuilder.create().fromJson(responseContent, WxMaShopEcAfterSaleGetResponse.class);
+  }
+
+  /**
    * 更新售后
    *
    * @param request
@@ -80,6 +88,16 @@ public class WxMaShopAfterSaleServiceImpl implements WxMaShopAfterSaleService {
   @Override
   public WxMaShopBaseResponse update(WxMaShopAfterSaleUpdateRequest request) throws WxErrorException {
     String responseContent = this.wxMaService.post(AFTERSALE_UPDATE, request);
+    JsonObject jsonObject = GsonParser.parse(responseContent);
+    if (jsonObject.get(ERRCODE).getAsInt() != 0) {
+      throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
+    }
+    return WxMaGsonBuilder.create().fromJson(responseContent, WxMaShopBaseResponse.class);
+  }
+
+  @Override
+  public WxMaShopBaseResponse update(WxMaShopEcAfterSaleUpdateRequest request) throws WxErrorException {
+    String responseContent = this.wxMaService.post(EC_AFTERSALE_UPDATE, request);
     JsonObject jsonObject = GsonParser.parse(responseContent);
     if (jsonObject.get(ERRCODE).getAsInt() != 0) {
       throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));

@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
  * 小程序接口地址常量.
  *
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
- * @date 2021-01-28
+ * created on  2021-01-28
  */
 @UtilityClass
 public class WxMaApiUrlConstants {
@@ -503,7 +503,8 @@ public class WxMaApiUrlConstants {
     interface Aftersale {
       String AFTERSALE_ADD = "https://api.weixin.qq.com/shop/ecaftersale/add";
       String AFTERSALE_CANCEL = "https://api.weixin.qq.com/shop/ecaftersale/cancel";
-      String AFTERSALE_UPDATE = "https://api.weixin.qq.com/shop/ecaftersale/update";
+      String AFTERSALE_UPDATE = "https://api.weixin.qq.com/shop/aftersale/update";
+      String EC_AFTERSALE_UPDATE = "https://api.weixin.qq.com/shop/ecaftersale/update";
       String AFTERSALE_UPLOAD_RETURN_INFO = "https://api.weixin.qq.com/shop/ecaftersale/uploadreturninfo";
       String AFTERSALE_ACCEPT_REFUND = "https://api.weixin.qq.com/shop/ecaftersale/acceptrefund";
       String AFTERSALE_ACCEPT_RETURN = "https://api.weixin.qq.com/shop/ecaftersale/acceptreturn";
@@ -511,7 +512,8 @@ public class WxMaApiUrlConstants {
       String AFTERSALE_UPLOAD_CERTIFICATES = "https://api.weixin.qq.com/shop/ecaftersale/upload_certificates";
       String AFTERSALE_UPLOAD_DEADLINE = "https://api.weixin.qq.com/shop/aftersale/update_deadline";
       String AFTERSALE_GET_LIST = "https://api.weixin.qq.com/shop/ecaftersale/get_list";
-      String AFTERSALE_GET = "https://api.weixin.qq.com/shop/ecaftersale/get";
+      String AFTERSALE_GET = "https://api.weixin.qq.com/shop/aftersale/get";
+      String ECAFTERSALE_GET = "https://api.weixin.qq.com/shop/ecaftersale/get";
     }
 
     interface Sharer {
