@@ -298,7 +298,7 @@ public interface WxCpApiPathConsts {
     /**
      * The constant GET_APPROVAL_DATA.
      */
-    String GET_APPROVAL_DATA = "/cgi-bin/oa/getapprovaldata";
+    String GET_APPROVAL_DATA = "/cgi-bin/corp/getapprovaldata";
 
     /**
      * The constant GET_CORP_CONF.
@@ -1054,6 +1054,10 @@ public interface WxCpApiPathConsts {
      * The constant GROUP_CHAT_TRANSFER.
      */
     String GROUP_CHAT_TRANSFER = "/cgi-bin/externalcontact/groupchat/transfer";
+    /**
+     * The constant GROUP_CHAT_ONJOB_TRANSFER.
+     */
+    String GROUP_CHAT_ONJOB_TRANSFER = "/cgi-bin/externalcontact/groupchat/onjob_transfer";
     /**
      * The constant LIST_USER_BEHAVIOR_DATA.
      */

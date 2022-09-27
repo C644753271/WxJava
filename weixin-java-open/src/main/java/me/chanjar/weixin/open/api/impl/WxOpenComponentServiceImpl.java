@@ -35,7 +35,6 @@ import me.chanjar.weixin.open.bean.tcbComponent.GetShareCloudBaseEnvResponse;
 import me.chanjar.weixin.open.bean.tcbComponent.GetTcbEnvListResponse;
 import me.chanjar.weixin.open.util.json.WxOpenGsonBuilder;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -503,7 +502,7 @@ public class WxOpenComponentServiceImpl implements WxOpenComponentService {
   }
 
   @Override
-  public List<WxOpenMaCodeTemplate> getTemplateList(@Nullable Integer templateType) throws WxErrorException {
+  public List<WxOpenMaCodeTemplate> getTemplateList(Integer templateType) throws WxErrorException {
     String url = GET_TEMPLATE_LIST_URL + (templateType == null ? "" : "?template_type=" + templateType);
     String responseContent = get(url, "access_token");
     JsonObject response = GsonParser.parse(StringUtils.defaultString(responseContent, "{}"));
@@ -605,6 +604,12 @@ public class WxOpenComponentServiceImpl implements WxOpenComponentService {
 
     String json = openAccountServicePost(appId, appIdType, GET_OPEN_URL, param);
     return WxOpenGetResult.fromJson(json);
+  }
+
+  @Override
+  public WxOpenHaveResult haveOpen() throws WxErrorException {
+    String json = post(GET_OPEN_URL, null);
+    return WxOpenHaveResult.fromJson(json);
   }
 
 

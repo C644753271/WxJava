@@ -19,7 +19,6 @@ import me.chanjar.weixin.open.bean.tcb.ShareCloudBaseEnvRequest;
 import me.chanjar.weixin.open.bean.tcb.ShareCloudBaseEnvResponse;
 import me.chanjar.weixin.open.bean.tcbComponent.GetShareCloudBaseEnvResponse;
 import me.chanjar.weixin.open.bean.tcbComponent.GetTcbEnvListResponse;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.List;
@@ -114,6 +113,11 @@ public interface WxOpenComponentService {
    * The constant GET_OPEN_URL.
    */
   String GET_OPEN_URL = "https://api.weixin.qq.com/cgi-bin/open/get";
+
+  /**
+   * 查询公众号/小程序是否绑定 open 帐号
+   */
+  String HAVE_OPEN_URL = "https://api.weixin.qq.com/cgi-bin/open/have";
 
   /**
    * 快速创建小程序接口.
@@ -495,7 +499,7 @@ public interface WxOpenComponentService {
    * @return 小程序代码模版列表 （templateId）
    * @throws WxErrorException 获取失败时返回，具体错误码请看此接口的注释文档
    */
-  List<WxOpenMaCodeTemplate> getTemplateList(@Nullable Integer templateType) throws WxErrorException;
+  List<WxOpenMaCodeTemplate> getTemplateList(Integer templateType) throws WxErrorException;
 
   /**
    * 请参考并使用 {@link #addToTemplate(long, int)}.
@@ -574,6 +578,16 @@ public interface WxOpenComponentService {
    * @throws WxErrorException the wx error exception
    */
   WxOpenGetResult getOpenAccount(String appId, String appIdType) throws WxErrorException;
+
+  /**
+   * https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/Mini_Program_Basic_Info/getbindopeninfo.html
+   * 查询公众号/小程序是否绑定 open 帐号
+   *
+   * @return 是否绑定 open 帐号，true表示绑定；false表示未绑定任何 open 帐号
+   * @throws WxErrorException the wx error exception
+   */
+  WxOpenHaveResult haveOpen() throws WxErrorException;
+
 
   /**
    * https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=21538208049W8uwq&token=&lang=zh_CN
