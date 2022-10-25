@@ -84,6 +84,12 @@ public interface WxCpApiPathConsts {
      */
     String EXTERNAL_CONTACT_MESSAGE_SEND = "/cgi-bin/externalcontact/message/send";
 
+    /**
+     * 撤回应用消息
+     * https://developer.work.weixin.qq.com/document/path/94867
+     */
+    String MESSAGE_RECALL = "/cgi-bin/message/recall";
+
   }
 
   /**
@@ -774,6 +780,11 @@ public interface WxCpApiPathConsts {
      * The constant GET_LOGIN_INFO.
      */
     String GET_LOGIN_INFO = "/cgi-bin/service/get_login_info";
+
+    /**
+     * The constant GET_CUSTOMIZED_AUTH_URL.
+     */
+    String GET_CUSTOMIZED_AUTH_URL = "/cgi-bin/service/get_customized_auth_url";
 
 
     /**
