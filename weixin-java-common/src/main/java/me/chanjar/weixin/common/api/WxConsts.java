@@ -223,6 +223,7 @@ public class WxConsts {
     public static final String TEXT = "text";
     public static final String VOICE = "voice";
     public static final String IMAGE = "image";
+    public static final String IMAGES = "images";
     public static final String MPVIDEO = "mpvideo";
   }
 
@@ -422,6 +423,20 @@ public class WxConsts {
      */
     public static final String VIEW_MINIPROGRAM = "view_miniprogram";
 
+    /**
+     * 订阅通知事件：用户操作订阅通知弹窗
+     */
+    public static final String SUBSCRIBE_MSG_POPUP_EVENT = "subscribe_msg_popup_event";
+
+    /**
+     * 订阅通知事件：用户管理订阅通知
+     */
+    public static final String SUBSCRIBE_MSG_CHANGE_EVENT = "subscribe_msg_change_event";
+
+    /**
+     * 订阅通知事件：发送订阅通知回调
+     */
+    public static final String SUBSCRIBE_MSG_SENT_EVENT = "subscribe_msg_sent_event";
   }
 
   /**

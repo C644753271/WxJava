@@ -2,7 +2,6 @@ package com.github.binarywang.wxpay.service.impl;
 
 import com.github.binarywang.wxpay.bean.ecommerce.SignatureHeader;
 import com.github.binarywang.wxpay.bean.profitsharingV3.*;
-import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.ProfitSharingV3Service;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -13,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +32,13 @@ public class ProfitSharingV3ServiceImpl implements ProfitSharingV3Service {
   private final WxPayService payService;
 
   @Override
+  public ProfitSharingMerchantMaxRatioQueryResult getProfitSharingMerchantMaxRatio(String subMchId) throws WxPayException {
+    String url = String.format("%s/v3/profitsharing/merchant-configs/%s", this.payService.getPayBaseUrl(), subMchId);
+    String result = this.payService.getV3(url);
+    return GSON.fromJson(result, ProfitSharingMerchantMaxRatioQueryResult.class);
+  }
+
+  @Override
   public ProfitSharingResult profitSharing(ProfitSharingRequest request) throws WxPayException {
     String url = String.format("%s/v3/profitsharing/orders", this.payService.getPayBaseUrl());
     RsaCryptoUtil.encryptFields(request, this.payService.getConfig().getVerifier().getValidCertificate());
@@ -47,6 +54,13 @@ public class ProfitSharingV3ServiceImpl implements ProfitSharingV3Service {
   }
 
   @Override
+  public ProfitSharingResult getProfitSharingResult(String outOrderNo, String transactionId, String subMchId) throws WxPayException {
+    String url = String.format("%s/v3/profitsharing/orders/%s?sub_mchid=%s&transaction_id=%s", this.payService.getPayBaseUrl(), outOrderNo, subMchId, transactionId);
+    String result = this.payService.getV3(url);
+    return GSON.fromJson(result, ProfitSharingResult.class);
+  }
+
+  @Override
   public ProfitSharingReturnResult profitSharingReturn(ProfitSharingReturnRequest request) throws WxPayException {
     String url = String.format("%s/v3/profitsharing/return-orders", this.payService.getPayBaseUrl());
     RsaCryptoUtil.encryptFields(request, this.payService.getConfig().getVerifier().getValidCertificate());
@@ -57,6 +71,13 @@ public class ProfitSharingV3ServiceImpl implements ProfitSharingV3Service {
   @Override
   public ProfitSharingReturnResult getProfitSharingReturnResult(String outOrderNo, String outReturnNo) throws WxPayException {
     String url = String.format("%s/v3/profitsharing/return-orders/%s?out_order_no=%s", this.payService.getPayBaseUrl(), outReturnNo, outOrderNo);
+    String result = this.payService.getV3(url);
+    return GSON.fromJson(result, ProfitSharingReturnResult.class);
+  }
+
+  @Override
+  public ProfitSharingReturnResult getProfitSharingReturnResult(String outOrderNo, String outReturnNo, String subMchId) throws WxPayException {
+    String url = String.format("%s/v3/profitsharing/return-orders/%s?sub_mchid=%s&out_order_no=%s", this.payService.getPayBaseUrl(), outReturnNo, subMchId, outOrderNo);
     String result = this.payService.getV3(url);
     return GSON.fromJson(result, ProfitSharingReturnResult.class);
   }
@@ -107,6 +128,19 @@ public class ProfitSharingV3ServiceImpl implements ProfitSharingV3Service {
     } catch (GeneralSecurityException | IOException e) {
       throw new WxPayException("解析报文异常！", e);
     }
+  }
+
+  @Override
+  public ProfitSharingBillResult getProfitSharingBill(ProfitSharingBillRequest request) throws WxPayException {
+    String url = String.format("%s/v3/profitsharing/bills?bill_date=%s", this.payService.getPayBaseUrl(), request.getBillDate());
+    if (StringUtils.isNotBlank(request.getSubMchId())) {
+      url = String.format("%s&sub_mchid=%s", url, request.getSubMchId());
+    }
+    if (StringUtils.isNotBlank(request.getTarType())) {
+      url = String.format("%s&tar_type=%s", url, request.getTarType());
+    }
+    String result = this.payService.getV3(url);
+    return GSON.fromJson(result, ProfitSharingBillResult.class);
   }
 
   private ProfitSharingNotifyData parseNotifyData(String data, SignatureHeader header) throws WxPayException {

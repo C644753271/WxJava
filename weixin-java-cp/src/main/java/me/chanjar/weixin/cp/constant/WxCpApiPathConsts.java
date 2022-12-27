@@ -290,6 +290,14 @@ public interface WxCpApiPathConsts {
      */
     String GET_TEMPLATE_DETAIL = "/cgi-bin/oa/gettemplatedetail";
     /**
+     * The constant CREATE_TEMPLATE.
+     */
+    String CREATE_TEMPLATE = "/cgi-bin/oa/approval/create_template";
+    /**
+     * The constant CREATE_TEMPLATE.
+     */
+    String UPDATE_TEMPLATE = "/cgi-bin/oa/approval/update_template";
+    /**
      * The constant APPLY_EVENT.
      */
     String APPLY_EVENT = "/cgi-bin/oa/applyevent";
@@ -795,6 +803,15 @@ public interface WxCpApiPathConsts {
      * The constant GET_ADMIN_LIST.
      */
     String GET_ADMIN_LIST = "/cgi-bin/service/get_admin_list";
+    /**
+     *  The constant GET_APP_QRCODE.
+     */
+    String GET_APP_QRCODE = "/cgi-bin/service/get_app_qrcode";
+
+    /**
+     *  The constant CORPID_TO_OPENCORPID.
+     */
+    String CORPID_TO_OPENCORPID = "/cgi-bin/service/corpid_to_opencorpid";
 
     /**
      * The constant GET_ORDER.
