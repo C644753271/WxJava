@@ -312,6 +312,13 @@ public interface WxPayService {
   MerchantTransferService getMerchantTransferService();
 
   /**
+   * 获取品牌红包商家转账到零钱服务类
+   *
+   * @return the brand merchant transfer service
+   */
+  BrandMerchantTransferService getBrandMerchantTransferService();
+
+  /**
    * 设置企业付款服务类，允许开发者自定义实现类.
    *
    * @param entPayService the ent pay service
