@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxErrorExceptionHandler;
 import me.chanjar.weixin.common.api.WxMessageDuplicateChecker;
-import me.chanjar.weixin.common.api.WxMessageInMemoryDuplicateChecker;
 import me.chanjar.weixin.common.api.WxMessageInMemoryDuplicateCheckerSingleton;
 import me.chanjar.weixin.common.session.InternalSession;
 import me.chanjar.weixin.common.session.InternalSessionManager;
@@ -14,9 +13,8 @@ import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.common.util.LogExceptionHandler;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import me.chanjar.weixin.mp.util.WxMpConfigStorageHolder;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,8 +102,9 @@ public class WxMpMessageRouter {
     try {
       if (!this.executorService.awaitTermination(second, TimeUnit.SECONDS)) {
         this.executorService.shutdownNow();
-        if (!this.executorService.awaitTermination(second, TimeUnit.SECONDS))
+        if (!this.executorService.awaitTermination(second, TimeUnit.SECONDS)) {
           log.error("线程池未关闭！");
+        }
       }
     } catch (InterruptedException ie) {
       this.executorService.shutdownNow();
@@ -174,14 +173,16 @@ public class WxMpMessageRouter {
   /**
    * 处理不同appid微信消息
    */
-  public WxMpXmlOutMessage route(final String appid, final WxMpXmlMessage wxMessage, final Map<String, Object> context) {
+  public WxMpXmlOutMessage route(final String appid, final WxMpXmlMessage wxMessage,
+                                 final Map<String, Object> context) {
     return route(wxMessage, context, this.wxMpService.switchoverTo(appid));
   }
 
   /**
    * 处理微信消息.
    */
-  public WxMpXmlOutMessage route(final WxMpXmlMessage wxMessage, final Map<String, Object> context, WxMpService wxMpService) {
+  public WxMpXmlOutMessage route(final WxMpXmlMessage wxMessage, final Map<String, Object> context,
+                                 WxMpService wxMpService) {
     if (wxMpService == null) {
       wxMpService = this.wxMpService;
     }
@@ -208,12 +209,16 @@ public class WxMpMessageRouter {
 
     WxMpXmlOutMessage res = null;
     final List<Future<?>> futures = new ArrayList<>();
+    String appId = WxMpConfigStorageHolder.get();
     for (final WxMpMessageRouterRule rule : matchRules) {
       // 返回最后一个非异步的rule的执行结果
       if (rule.isAsync()) {
         futures.add(
           this.executorService.submit(() -> {
-            rule.service(wxMessage, context, mpService, WxMpMessageRouter.this.sessionManager, WxMpMessageRouter.this.exceptionHandler);
+            //传入父线程的appId
+            this.wxMpService.switchoverTo(appId);
+            rule.service(wxMessage, context, mpService, WxMpMessageRouter.this.sessionManager,
+              WxMpMessageRouter.this.exceptionHandler);
           })
         );
       } else {
