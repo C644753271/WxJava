@@ -27,6 +27,17 @@ public class WxPayConstants {
   public static final Format QUERY_COMMENT_DATE_FORMAT = FastDateFormat.getInstance("yyyyMMddHHmmss");
 
   /**
+   * 币种类型.
+   */
+  public static class CurrencyType {
+    /**
+     * 人民币.
+     */
+    public static final String CNY = "CNY";
+
+  }
+
+  /**
    * 校验用户姓名选项，企业付款时使用.
    */
   public static class CheckNameOption {
@@ -157,24 +168,6 @@ public class WxPayConstants {
           }
         };
     }
-  }
-
-  /**
-   * 账户类型
-   */
-  public static class AccountType {
-    /**
-     * 基本账户
-     */
-    public static final String BASIC = "Basic";
-    /**
-     * 运营账户
-     */
-    public static final String OPERATION = "Operation";
-    /**
-     * Fees
-     */
-    public static final String FEES = "Fees";
   }
 
   /**

@@ -4,6 +4,7 @@ import cn.binarywang.wx.miniapp.api.*;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.util.WxMaConfigHolder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -84,7 +85,15 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   private final WxMaProductOrderService productOrderService = new WxMaProductOrderServiceImpl(this);
   private final WxMaShopCouponService wxMaShopCouponService = new WxMaShopCouponServiceImpl(this);
   private final WxMaShopPayService wxMaShopPayService = new WxMaShopPayServiceImpl(this);
-  private Map<String, WxMaConfig> configMap;
+
+  private final WxMaOrderShippingService wxMaOrderShippingService = new WxMaOrderShippingServiceImpl(this);
+
+  private final WxMaOpenApiService wxMaOpenApiService = new WxMaOpenApiServiceImpl(this);
+  private final WxMaVodService wxMaVodService = new WxMaVodServiceImpl(this);
+  private final WxMaXPayService wxMaXPayService = new WxMaXPayServiceImpl(this);
+  private final WxMaExpressDeliveryReturnService wxMaExpressDeliveryReturnService = new WxMaExpressDeliveryReturnServiceImpl(this);
+
+  private Map<String, WxMaConfig> configMap = new HashMap<>();
   private int retrySleepMillis = 1000;
   private int maxRetryTimes = 5;
 
@@ -174,7 +183,13 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
           return this.getWxMaConfig().getAccessToken();
         }
       } while (!locked);
-      String response = doGetAccessTokenRequest();
+
+      String response;
+      if (getWxMaConfig().isStableAccessToken()) {
+        response = doGetStableAccessTokenRequest(forceRefresh);
+      } else {
+        response = doGetAccessTokenRequest();
+      }
       return extractAccessToken(response);
     } catch (IOException | InterruptedException e) {
       throw new WxRuntimeException(e);
@@ -192,6 +207,15 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
    * @throws IOException .
    */
   protected abstract String doGetAccessTokenRequest() throws IOException;
+
+
+  /**
+   * 通过网络请求获取稳定版接口调用凭据
+   *
+   * @return .
+   * @throws IOException .
+   */
+  protected abstract String doGetStableAccessTokenRequest(boolean forceRefresh) throws IOException;
 
   @Override
   public String get(String url, String queryParam) throws WxErrorException {
@@ -317,14 +341,15 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
    * @throws WxErrorException 异常
    */
   protected String extractAccessToken(String resultContent) throws WxErrorException {
-    log.info("resultContent: " + resultContent);
+    log.debug("access-token response: {}", resultContent);
     WxMaConfig config = this.getWxMaConfig();
     WxError error = WxError.fromJson(resultContent, WxType.MiniApp);
     if (error.getErrorCode() != 0) {
       throw new WxErrorException(error);
     }
+
     WxAccessToken accessToken = WxAccessToken.fromJson(resultContent);
-    config.updateAccessToken(accessToken.getAccessToken(), accessToken.getExpiresIn());
+    config.updateAccessTokenProcessor(accessToken.getAccessToken(), accessToken.getExpiresIn());
     return accessToken.getAccessToken();
   }
 
@@ -350,8 +375,14 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   }
 
   @Override
+  @JsonDeserialize
   public void setMultiConfigs(Map<String, WxMaConfig> configs, String defaultMiniappId) {
-    this.configMap = Maps.newHashMap(configs);
+    // 防止覆盖配置
+    if(this.configMap != null) {
+      this.configMap.putAll(configs);
+    } else {
+      this.configMap = Maps.newHashMap(configs);
+    }
     WxMaConfigHolder.set(defaultMiniappId);
     this.initHttp();
   }
@@ -359,7 +390,11 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   @Override
   public void addConfig(String miniappId, WxMaConfig configStorages) {
     synchronized (this) {
-      if (this.configMap == null) {
+      /*
+       * 因为commit f74b00cf 默认初始化了configMap，导致使用此方法无法进入if从而触发initHttp()，
+       * 就会出现HttpClient报NullPointException
+       */
+      if (this.configMap == null || this.configMap.isEmpty()) {
         this.setWxMaConfig(configStorages);
       } else {
         WxMaConfigHolder.set(miniappId);
@@ -584,10 +619,14 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   }
 
   @Override
-  public WxMaDeviceSubscribeService getDeviceSubscribeService(){ return this.deviceSubscribeService; }
+  public WxMaDeviceSubscribeService getDeviceSubscribeService() {
+    return this.deviceSubscribeService;
+  }
 
   @Override
-  public WxMaMarketingService getMarketingService() {return  this.marketingService;  }
+  public WxMaMarketingService getMarketingService() {
+    return this.marketingService;
+  }
 
   @Override
   public WxMaImmediateDeliveryService getWxMaImmediateDeliveryService() {
@@ -595,13 +634,19 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   }
 
   @Override
-  public WxMaSafetyRiskControlService getSafetyRiskControlService(){ return this.safetyRiskControlService; }
+  public WxMaSafetyRiskControlService getSafetyRiskControlService() {
+    return this.safetyRiskControlService;
+  }
 
   @Override
-  public WxMaShopSharerService getShopSharerService() {return this.shopSharerService; }
+  public WxMaShopSharerService getShopSharerService() {
+    return this.shopSharerService;
+  }
 
   @Override
-  public WxMaProductService getProductService() { return this.productService; }
+  public WxMaProductService getProductService() {
+    return this.productService;
+  }
 
   @Override
   public WxMaProductOrderService getProductOrderService() {
@@ -616,5 +661,35 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   @Override
   public WxMaShopPayService getWxMaShopPayService() {
     return this.wxMaShopPayService;
+  }
+
+  /**
+   * 小程序发货信息管理服务
+   *
+   * @return getWxMaOrderShippingService
+   */
+  @Override
+  public WxMaOrderShippingService getWxMaOrderShippingService() {
+    return this.wxMaOrderShippingService;
+  }
+
+  @Override
+  public WxMaOpenApiService getWxMaOpenApiService() {
+    return this.wxMaOpenApiService;
+  }
+
+  @Override
+  public WxMaVodService getWxMaVodService() {
+    return this.wxMaVodService;
+  }
+
+  @Override
+  public WxMaXPayService getWxMaXPayService() {
+    return this.wxMaXPayService;
+  }
+
+  @Override
+  public WxMaExpressDeliveryReturnService getWxMaExpressDeliveryReturnService(){
+    return this.wxMaExpressDeliveryReturnService;
   }
 }

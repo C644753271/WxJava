@@ -16,11 +16,13 @@
     wx.cp.corp-id = @corp-id
     wx.cp.corp-secret = @corp-secret
     # 选填
+    wx.cp.agent-id = @agent-id
     wx.cp.token = @token
     wx.cp.aes-key = @aes-key
-    wx.cp.agent-id = @agent-id
+    wx.cp.msg-audit-priKey = @msg-audit-priKey
+    wx.cp.msg-audit-lib-path = @msg-audit-lib-path
     # ConfigStorage 配置（选填）
-    wx.cp.config-storage.type=memory # memory 默认，目前只支持 memory 类型，可以自行扩展 redis 等类型
+    wx.cp.config-storage.type=memory # 配置类型: memory(默认), jedis, redisson, redistemplate
     # http 客户端配置（选填）
     wx.cp.config-storage.http-proxy-host=
     wx.cp.config-storage.http-proxy-port=

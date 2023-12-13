@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.List;
 
+import static me.chanjar.weixin.common.api.WxConsts.ERR_CODE;
 import static me.chanjar.weixin.mp.enums.WxMpApiUrl.SubscribeMsg.*;
 
 /**
@@ -34,7 +35,6 @@ import static me.chanjar.weixin.mp.enums.WxMpApiUrl.SubscribeMsg.*;
  */
 @RequiredArgsConstructor
 public class WxMpSubscribeMsgServiceImpl implements WxMpSubscribeMsgService {
-  private static final String ERR_CODE = "errcode";
   private final WxMpService service;
 
   @Override
@@ -103,11 +103,12 @@ public class WxMpSubscribeMsgServiceImpl implements WxMpSubscribeMsgService {
   }
 
   @Override
-  public void send(WxMpSubscribeMessage subscribeMessage) throws WxErrorException {
+  public String send(WxMpSubscribeMessage subscribeMessage) throws WxErrorException {
     String responseContent = this.service.post(SEND_SUBSCRIBE_MESSAGE_URL, subscribeMessage.toJson());
     JsonObject jsonObject = GsonParser.parse(responseContent);
     if (jsonObject.get(ERR_CODE).getAsInt() != 0) {
       throw new WxErrorException(WxError.fromJson(responseContent, WxType.MP));
     }
+    return jsonObject.get("msgid").getAsString();
   }
 }

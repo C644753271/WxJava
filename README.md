@@ -31,17 +31,17 @@
   <tr>
     <td align="left" valign="middle">
       <a href="http://mp.weixin.qq.com/mp/homepage?__biz=MzI3MzAwMzk4OA==&hid=1&sn=f31af3bf562b116b061c9ab4edf70b61&scene=18#wechat_redirect" target="_blank">
-        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/qrcodes/mp.png" alt="mp qrcode">
+        <img height="120" src="https://gitee.com/binary/weixin-java-tools/raw/develop/images/qrcodes/mp.png" alt="mp qrcode">
       </a>
     </td>
     <td valign="middle">
-      <a href="https://www.diboot.com/" target="_blank">
-        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/banners/diboot.png" alt="diboot低代码开发平台"/>
+      <a href="https://www.diboot.com?from=wxjava" target="_blank">
+        <img height="120" src="https://www.diboot.com/img/diboot_ad.png" alt="diboot低代码开发平台"/>
       </a>
     </td>
     <td align="right" valign="middle">
       <a href="https://promotion.aliyun.com/ntms/act/qwbk.html?userCode=7makzf5h" target="_blank">
-        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/banners/aliyun.jpg" alt="aliyun ad">
+        <img height="120" src="https://gitee.com/binary/weixin-java-tools/raw/develop/images/banners/aliyun.jpg" alt="aliyun ad">
       </a>
     </td>
   </tr>
@@ -49,7 +49,7 @@
 
 ### 重要信息
 1. 项目合作洽谈请联系微信`binary0000`（在微信里自行搜索并添加好友，请注明来意，如有关于SDK问题需讨论请参考下文入群讨论，不要加此微信）。
-2. **2022-8-21 发布 [【4.4.0正式版】](https://mp.weixin.qq.com/s/kHg-QHMK6ymbQwTdKFF2lQ)**！
+2. **2023-4-23 发布 [【4.5.0正式版】](https://mp.weixin.qq.com/s/4ZYKJnIwP9YNDvbyOhW_3A)**！
 3. 贡献源码可以参考视频：[【贡献源码全过程（上集）】](https://mp.weixin.qq.com/s/3xUZSATWwHR_gZZm207h7Q)、[【贡献源码全过程（下集）】](https://mp.weixin.qq.com/s/nyzJwVVoYSJ4hSbwyvTx9A) ，友情提供：[程序员小山与Bug](https://space.bilibili.com/473631007)
 4. 新手重要提示：本项目仅是一个SDK开发工具包，未提供Web实现，建议使用 `maven` 或 `gradle` 引用本项目即可使用本SDK提供的各种功能，详情可参考 **[【Demo项目】](demo.md)** 或本项目中的部分单元测试代码；
 5. 微信开发新手请务必阅读【开发文档】（[Gitee Wiki](https://gitee.com/binary/weixin-java-tools/wikis/Home) 或者 [Github Wiki](https://github.com/Wechat-Group/WxJava/wiki)）的常见问题部分，可以少走很多弯路，节省不少时间。
@@ -80,7 +80,7 @@
 <dependency>
   <groupId>com.github.binarywang</groupId>
   <artifactId>（不同模块参考下文）</artifactId>
-  <version>4.4.0</version>
+  <version>4.5.0</version>
 </dependency>
 ```
 
@@ -97,7 +97,7 @@
 <details>
 <summary>点此展开查看</summary>
   
-1. 本项目定为大约每两个月发布一次正式版（同时 `develop` 分支代码合并进入 `master` 分支），版本号格式为 `X.X.0`（如`2.1.0`，`2.2.0`等），遇到重大问题需修复会及时提交新版本，欢迎大家随时提交Pull Request；
+1. 本项目定为大约每两个月发布一次正式版（同时 `develop` 分支代码合并进入 `release` 分支），版本号格式为 `X.X.0`（如`2.1.0`，`2.2.0`等），遇到重大问题需修复会及时提交新版本，欢迎大家随时提交Pull Request；
 2. BUG修复和新特性一般会先发布成小版本作为临时测试版本（如`3.6.8.B`，即尾号不为0，并添加B，以区别于正式版），代码仅存在于 `develop` 分支中；
 3. 目前最新版本号为 [![Maven Central](https://img.shields.io/maven-central/v/com.github.binarywang/wx-java.svg)](http://mvnrepository.com/artifact/com.github.binarywang/wx-java) ，也可以通过访问链接 [【微信支付】](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.binarywang%22%20AND%20a%3A%22weixin-java-pay%22) 、[【微信小程序】](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.binarywang%22%20AND%20a%3A%22weixin-java-miniapp%22) 、[【公众号】](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.binarywang%22%20AND%20a%3A%22weixin-java-mp%22) 、[【企业微信】](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.binarywang%22%20AND%20a%3A%22weixin-java-cp%22)、[【开放平台】](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.binarywang%22%20AND%20a%3A%22weixin-java-open%22)
 分别查看所有最新的版本。 
@@ -178,17 +178,17 @@
 <summary>点击此处展开查看贡献次数最多的几位小伙伴</summary>
 
 1. [chanjarster (Daniel Qian)](https://github.com/chanjarster)
-1. [binarywang (Binary Wang)](https://github.com/binarywang)
-1. [007gzs](https://github.com/007gzs)
-1. [Silloy](https://github.com/silloy)
-1. [mgcnrx11](https://github.com/mgcnrx11)
-1. [0katekate0 (Wang_Wong)](https://github.com/0katekate0)
-1. [yuanqixun](https://github.com/yuanqixun)
-1. [kakotor](https://github.com/kakotor)
-1. [aimilin6688 (Jonk)](https://github.com/aimilin6688)
-1. [lkqm (Mario Luo)](https://github.com/lkqm)
-1. [kareanyi (MillerLin)](https://github.com/kareanyi)
-
+2. [binarywang (Binary Wang)](https://github.com/binarywang)
+3. [007gzs](https://github.com/007gzs)
+4. [Silloy](https://github.com/silloy)
+5. [mgcnrx11](https://github.com/mgcnrx11)
+6. [0katekate0 (Wang_Wong)](https://github.com/0katekate0)
+7. [yuanqixun](https://github.com/yuanqixun)
+8. [kakotor](https://github.com/kakotor)
+9. [aimilin6688 (Jonk)](https://github.com/aimilin6688)
+10. [lkqm (Mario Luo)](https://github.com/lkqm)
+11. [kareanyi (MillerLin)](https://github.com/kareanyi)
+12. [Bincent (Hongbin.hsu)](https://gitee.com/bincent)
 </details>
 
 ### GitHub Stargazers over time

@@ -12,7 +12,6 @@ import java.util.List;
  * The type Wx cp tp contact search resp.
  *
  * @author uianz
- * @description
  * @since 2020 /12/23 下午 02:55
  */
 @EqualsAndHashCode(callSuper = true)
@@ -24,6 +23,9 @@ public class WxCpTpContactSearchResp extends WxCpBaseResp {
 
   @SerializedName("query_result")
   private QueryResult queryResult;
+
+  @SerializedName("next_cursor")
+  private String nextCursor;
 
   /**
    * The type Query result.

@@ -33,8 +33,10 @@ public class WxCpInterceptRule implements Serializable, ToJson {
   private ExtraRule extraRule;
   @SerializedName("intercept_type")
   private int interceptType;
-  @SerializedName("applicable_range")
-  private ApplicableRange applicableRange;
+  @SerializedName("add_applicable_range")
+  private ApplicableRange addApplicableRange;
+  @SerializedName("remove_applicable_range")
+  private ApplicableRange removeApplicableRange;
 
   @Data
   public static class ExtraRule implements Serializable {

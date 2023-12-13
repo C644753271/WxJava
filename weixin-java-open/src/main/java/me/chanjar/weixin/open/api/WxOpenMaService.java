@@ -43,6 +43,11 @@ public interface WxOpenMaService extends WxMaService {
   String API_SET_WEBVIEW_DOMAIN = "https://api.weixin.qq.com/wxa/setwebviewdomain";
 
   /**
+   * 获取业务域名校验文件（仅供第三方代小程序调用）
+   */
+  String API_GET_WEBVIEW_DOMAIN_CONFIRM_FILE = "https://api.weixin.qq.com/wxa/get_webviewdomain_confirmfile";
+
+  /**
    * 获取帐号基本信息
    * <pre>
    * GET请求
@@ -138,9 +143,14 @@ public interface WxOpenMaService extends WxMaService {
   String API_RELEASE = "https://api.weixin.qq.com/wxa/release";
 
   /**
-   * 10. 修改小程序线上代码的可见状态（仅供第三方代小程序调用)
+   * 10.1 修改小程序线上代码的可见状态（仅供第三方代小程序调用)
    */
   String API_CHANGE_VISITSTATUS = "https://api.weixin.qq.com/wxa/change_visitstatus";
+
+  /**
+   * 10.2 查询小程序线上代码的可见状态（仅供第三方代小程序调用)
+   */
+  String API_GET_VISITSTATUS = "https://api.weixin.qq.com/wxa/getvisitstatus";
 
   /**
    * 11.小程序版本回退（仅供第三方代小程序调用）
@@ -267,17 +277,20 @@ public interface WxOpenMaService extends WxMaService {
 
   /**
    * 修改域名
-   *
+   * <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/Mini_Program_Basic_Info/Server_Address_Configuration.html">文档地址</a>
    * @param action           delete删除, set覆盖, get获取
-   * @param requestDomains   the requestdomain list
-   * @param wsRequestDomains the wsrequestdomain list
-   * @param uploadDomains    the uploaddomain list
-   * @param downloadDomains  the downloaddomain list
+   * @param requestDomains   request 合法域名；当 action 是 get 时不需要此字段
+   * @param wsRequestDomains socket 合法域名；当 action 是 get 时不需要此字段
+   * @param uploadDomains    uploadFile 合法域名；当 action 是 get 时不需要此字段
+   * @param downloadDomains  downloadFile 合法域名；当 action 是 get 时不需要此字段
+   * @param tcpDomains tcp 合法域名；当 action 是 get 时不需要此字段
+   * @param udpDomains udp 合法域名；当 action 是 get 时不需要此字段
    * @return the wx open ma domain result
    * @throws WxErrorException the wx error exception
    */
   WxOpenMaDomainResult modifyDomain(String action, List<String> requestDomains, List<String> wsRequestDomains,
-                                    List<String> uploadDomains, List<String> downloadDomains) throws WxErrorException;
+                                    List<String> uploadDomains, List<String> downloadDomains,
+                                    List<String> udpDomains, List<String> tcpDomains) throws WxErrorException;
 
   /**
    * 获取小程序的业务域名
@@ -314,6 +327,14 @@ public interface WxOpenMaService extends WxMaService {
    * @throws WxErrorException the wx error exception
    */
   WxOpenMaWebDomainResult setWebViewDomainInfo(String action, List<String> domainList) throws WxErrorException;
+
+  /**
+   * 获取业务域名校验文件
+   *
+   * @return 业务域名校验文件信息
+   * @throws WxErrorException 操作失败时抛出，具体错误码请看文档
+   */
+  WxOpenMaDomainConfirmFileResult getWebviewDomainConfirmFile() throws WxErrorException;
 
   /**
    * 获取小程序的信息
@@ -477,13 +498,21 @@ public interface WxOpenMaService extends WxMaService {
   WxOpenResult releaseAudited() throws WxErrorException;
 
   /**
-   * 10. 修改小程序线上代码的可见状态（仅供第三方代小程序调用）
+   * 10.1 修改小程序线上代码的可见状态（仅供第三方代小程序调用）
    *
    * @param action the action
    * @return the wx open result
    * @throws WxErrorException the wx error exception
    */
   WxOpenResult changeVisitStatus(String action) throws WxErrorException;
+
+  /**
+   * 10.2 查询小程序服务状态（仅供第三方代小程序调用）
+   *
+   * @return 小程序服务状态
+   * @throws WxErrorException 查询失败时返回，具体错误码请看此接口的注释文档
+   */
+  WxOpenMaVisitStatusResult getVisitStatus() throws WxErrorException;
 
   /**
    * 11. 小程序版本回退（仅供第三方代小程序调用）
@@ -657,6 +686,12 @@ public interface WxOpenMaService extends WxMaService {
    * @return 小程序用户隐私保护指引服务
    */
   WxOpenMaPrivacyService getPrivacyService();
+
+  /**
+   * 购物订单
+   * @return 购物订单服务
+   */
+  WxOpenMaShoppingOrdersService getShoppingOrdersService();
 
   /**
    * 小程序审核 提审素材上传接口

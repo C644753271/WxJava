@@ -2,6 +2,7 @@ package me.chanjar.weixin.cp.bean.oa;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.Getter;
 import me.chanjar.weixin.common.util.json.WxGsonBuilder;
 
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class WxCpApprovalInfoQueryFilter implements Serializable {
 
   private static final long serialVersionUID = 3318064927980231802L;
 
-  private WxCpApprovalInfoQueryFilter.KEY key;
+  private KEY key;
 
   private Object value;
 
@@ -37,6 +38,7 @@ public class WxCpApprovalInfoQueryFilter implements Serializable {
   /**
    * The enum Key.
    */
+  @Getter
   public enum KEY {
 
     /**
@@ -58,7 +60,12 @@ public class WxCpApprovalInfoQueryFilter implements Serializable {
      * sp_status - 审批状态。
      */
     @SerializedName("sp_status")
-    SP_STATUS("sp_status");
+    SP_STATUS("sp_status"),
+    /**
+     * record_type - 审批单类型属性，1-请假；2-打卡补卡；3-出差；4-外出；5-加班； 6- 调班；7-会议室预定；8-退款审批；9-红包报销审批。
+     */
+    @SerializedName("record_type")
+    record_type("record_type");
 
     private final String value;
 

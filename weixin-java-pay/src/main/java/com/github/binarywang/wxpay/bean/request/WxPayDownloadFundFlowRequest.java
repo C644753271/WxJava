@@ -1,6 +1,5 @@
 package com.github.binarywang.wxpay.bean.request;
 
-import com.github.binarywang.wxpay.constant.WxPayConstants.AccountType;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.*;
@@ -26,6 +25,27 @@ import java.util.Map;
 @AllArgsConstructor
 @XStreamAlias("xml")
 public class WxPayDownloadFundFlowRequest extends BaseWxPayRequest {
+
+  /**
+   * 账户类型
+   */
+  public static class AccountType {
+    /**
+     * BASIC：基本账户
+     */
+    public static final String BASIC = "Basic";
+    /**
+     * OPERATION：运营账户
+     */
+    public static final String OPERATION = "Operation";
+    /**
+     * FEES：手续费账户
+     */
+    public static final String FEES = "Fees";
+  }
+
+  private static final long serialVersionUID = -8352717499328292952L;
+
   private static final String[] ACCOUNT_TYPES = new String[]{AccountType.BASIC, AccountType.OPERATION, AccountType.FEES};
   private static final String SIGN_TYPE_HMAC_SHA256 = "HMAC-SHA256";
   private static final String TAR_TYPE_GZIP = "GZIP";
@@ -83,8 +103,9 @@ public class WxPayDownloadFundFlowRequest extends BaseWxPayRequest {
       throw new WxPayException(String.format("account_type必须为%s其中之一,实际值：%s",
         Arrays.toString(ACCOUNT_TYPES), this.getAccountType()));
     }
-    /**
-     * 目前仅支持HMAC-SHA256
+
+    /*
+      目前仅支持HMAC-SHA256
      */
     this.setSignType(SIGN_TYPE_HMAC_SHA256);
   }

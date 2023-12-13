@@ -16,6 +16,25 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class WxPayApplyFundFlowBillV3Request implements Serializable {
+  /**
+   * 账户类型
+   */
+  public static class AccountType {
+    /**
+     * BASIC：基本账户
+     */
+    public static final String BASIC = "BASIC";
+    /**
+     * OPERATION：运营账户
+     */
+    public static final String OPERATION = "OPERATION";
+    /**
+     * FEES：手续费账户
+     */
+    public static final String FEES = "FEES";
+  }
+
+
   private static final long serialVersionUID = 1L;
   /**
    * <pre>
