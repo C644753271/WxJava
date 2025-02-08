@@ -49,6 +49,11 @@ public class WxCpConsts {
     public static final String CHANGE_CONTACT = "change_contact";
 
     /**
+     * 企业微信模板卡片事件推送
+     */
+    public static final String TEMPLATE_CARD_EVENT = "template_card_event";
+
+    /**
      * 点击菜单拉取消息的事件推送.
      */
     public static final String CLICK = "click";
@@ -92,6 +97,31 @@ public class WxCpConsts {
      * 任务卡片事件推送.
      */
     public static final String TASKCARD_CLICK = "taskcard_click";
+
+    /**
+     * 企业互联共享应用事件回调.
+     */
+    public static final String SHARE_AGENT_CHANGE = "share_agent_change";
+
+    /**
+     * 上下游共享应用事件回调.
+     */
+    public static final String SHARE_CHAIN_CHANGE = "share_chain_change";
+
+    /**
+     * 通用模板卡片右上角菜单事件推送.
+     */
+    public static final String TEMPLATE_CARD_MENU_EVENT = "template_card_menu_event";
+
+    /**
+     * 长期未使用应用临时停用事件.
+     */
+    public static final String CLOSE_INACTIVE_AGENT = "close_inactive_agent";
+
+    /**
+     * 长期未使用应用重新启用事件.
+     */
+    public static final String REOPEN_INACTIVE_AGENT = "reopen_inactive_agent";
 
     /**
      * 企业成员添加外部联系人事件推送 & 会话存档客户同意进行聊天内容存档事件回调事件
@@ -145,6 +175,21 @@ public class WxCpConsts {
     public static final String DELETE_SCHEDULE = "delete_schedule";
 
     /**
+     * 日程回执事件
+     */
+    public static final String RESPOND_SCHEDULE = "respond_schedule";
+
+    /**
+     * 会议室预定事件.
+     */
+    public static final String BOOK_MEETING_ROOM = "book_meeting_room";
+
+    /**
+     * 会议室取消事件.
+     */
+    public static final String CANCEL_MEETING_ROOM = "cancel_meeting_room";
+
+    /**
      * 家校通讯录事件
      */
     public static final String CHANGE_SCHOOL_CONTACT = "change_school_contact";
@@ -158,6 +203,60 @@ public class WxCpConsts {
      * 直播回调事件
      */
     public static final String LIVING_STATUS_CHANGE = "living_status_change";
+
+    /**
+     * 微信客服消息事件
+     */
+    public static final String KF_MSG_OR_EVENT = "kf_msg_or_event";
+
+    /**
+     * 客服账号授权变更事件
+     */
+    public static final String KF_ACCOUNT_AUTH_CHANGE = "kf_account_auth_change";
+
+    /**
+     * 获客助手事件通知
+     */
+    public static final String CUSTOMER_ACQUISITION = "customer_acquisition";
+
+  }
+
+  /**
+   * 获客助手事件通知CHANGE_TYPE
+   * https://developer.work.weixin.qq.com/document/path/97299
+   */
+  @UtilityClass
+  public static class CustomerAcquisitionChangeType {
+
+    /**
+     * 获客额度即将耗尽事件
+     */
+    public static final String BALANCE_LOW = "balance_low";
+
+    /**
+     * 使用量已经耗尽事件
+     */
+    public static final String BALANCE_EXHAUSTED = "balance_exhausted";
+
+    /**
+     * 获客链接不可用事件
+     */
+    public static final String LINK_UNAVAILABLE = "link_unavailable";
+
+    /**
+     * 微信客户发起会话事件
+     */
+    public static final String CUSTOMER_START_CHAT = "customer_start_chat";
+
+    /**
+     * 删除获客链接事件
+     */
+    public static final String DELETE_LINK = "delete_link";
+
+    /**
+     * 通过获客链接申请好友事件
+     */
+    public static final String friend_request = "friend_request";
 
   }
 

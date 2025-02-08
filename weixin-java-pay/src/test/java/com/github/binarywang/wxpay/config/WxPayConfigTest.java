@@ -44,4 +44,5 @@ public class WxPayConfigTest {
     payConfig.setKeyString("MIIKmgIBAzCCCmQGCS...");
     payConfig.initSSLContext();
   }
+
 }

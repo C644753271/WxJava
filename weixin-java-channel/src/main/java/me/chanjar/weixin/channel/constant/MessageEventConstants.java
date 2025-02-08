@@ -16,12 +16,16 @@ public interface MessageEventConstants {
     String PRODUCT_SPU_UPDATE = "product_spu_update";
     /** 类目审核结果 */
     String PRODUCT_CATEGORY_AUDIT = "product_category_audit";
+    /** 库存不足 */
+    String PRODUCT_STOCK_NO_ENOUGH = "channels_ec_stock_no_enough";
     /** 订单下单 */
     String ORDER_NEW = "channels_ec_order_new";
     /** 订单取消 */
     String ORDER_CANCEL = "channels_ec_order_cancel";
     /** 订单支付成功 */
     String ORDER_PAY = "channels_ec_order_pay";
+    /** 订单待发货 */
+    String ORDER_WAIT_SHIPPING = "channels_ec_order_wait_shipping";
     /** 订单发货 */
     String ORDER_DELIVER = "channels_ec_order_deliver";
     /** 订单确认收货 */
@@ -55,6 +59,8 @@ public interface MessageEventConstants {
     String USER_COUPON_UNUSE = "channels_ec_user_coupon_unuse";
     /** 优惠券核销通知 */
     String USER_COUPON_USE = "channels_ec_user_coupon_use";
+    /** 发放团购优惠成功回调 */
+    String VOUCHER_SEND_SUCC = "channels_ec_voucher_send_succ";
     // 资金相关
     /** 结算账户变更回调 */
     String ACCOUNT_NOTIFY = "channels_ec_acct_notify";
@@ -67,4 +73,26 @@ public interface MessageEventConstants {
     // 其他
     /** 进入会话事件 */
     String USER_ENTER_TEMP_SESSION = "user_enter_tempsession";
+
+    // 会员相关
+    /** 用户加入会员 */
+    String USER_VIP_JOIN = "channels_ec_vip_join";
+    /** 用户注销会员 */
+    String USER_VIP_CLOSE = "channels_ec_vip_close";
+    /** 用户等级更新 */
+    String USER_VIP_GRADE_INFO_UPDATE = "channels_ec_vip_grade_info_update";
+    /** 用户积分更新 */
+    String USER_VIP_SCORE_UPDATE = "channels_ec_vip_score_update";
+    /** 用户积分兑换 */
+    String USER_VIP_SCORE_EXCHANGE = "channels_ec_vip_score_exchange";
+
+    // 分享员相关
+    /** 分享员变更 **/
+    String SHARER_CHANGE = "channels_ec_sharer_change";
+
+    // 店铺相关
+    /** 小店注销 */
+    String CLOSE_STORE = "channels_ec_close_store";
+    /** 小店修改 */
+    String SET_SHOP_NICKNAME = "set_shop_nickname";
 }

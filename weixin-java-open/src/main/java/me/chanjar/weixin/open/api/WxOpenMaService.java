@@ -2,10 +2,12 @@ package me.chanjar.weixin.open.api;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaAuditMediaUploadResult;
+import cn.binarywang.wx.miniapp.bean.WxMaUploadAuthMaterialResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.open.bean.ma.WxMaPrefetchDomain;
 import me.chanjar.weixin.open.bean.ma.WxMaScheme;
 import me.chanjar.weixin.open.bean.message.WxOpenMaSubmitAuditMessage;
+import me.chanjar.weixin.open.bean.message.WxOpenMaVerifyBetaWeappMessage;
 import me.chanjar.weixin.open.bean.result.*;
 
 import java.io.File;
@@ -113,17 +115,22 @@ public interface WxOpenMaService extends WxMaService {
   String API_TEST_QRCODE = "https://api.weixin.qq.com/wxa/get_qrcode";
 
   /**
-   * 3. 获取授权小程序帐号的可选类目
+   * 3. 试用小程序快速认证
+   */
+  String API_VERIFY_BETA_WEAPP = "https://api.weixin.qq.com/wxa/verifybetaweapp";
+
+  /**
+   * 4. 获取授权小程序帐号的可选类目
    */
   String API_GET_CATEGORY = "https://api.weixin.qq.com/wxa/get_category";
 
   /**
-   * 4. 获取小程序的第三方提交代码的页面配置（仅供第三方开发者代小程序调用）
+   * 5. 获取小程序的第三方提交代码的页面配置（仅供第三方开发者代小程序调用）
    */
   String API_GET_PAGE = "https://api.weixin.qq.com/wxa/get_page";
 
   /**
-   * 5. 将第三方提交的代码包提交审核（仅供第三方开发者代小程序调用）
+   * 6. 将第三方提交的代码包提交审核（仅供第三方开发者代小程序调用）
    */
   String API_SUBMIT_AUDIT = "https://api.weixin.qq.com/wxa/submit_audit";
 
@@ -218,6 +225,11 @@ public interface WxOpenMaService extends WxMaService {
    */
   String API_GET_GRAY_RELEASE_PLAN = "https://api.weixin.qq.com/wxa/getgrayreleaseplan";
 
+  /**
+   * 17 获取隐私接口检测结果
+   */
+  String API_GET_CODE_PRIVACY_INFO = "https://api.weixin.qq.com/wxa/security/get_code_privacy_info";
+
 
   /**
    * 查询服务商的当月提审限额和加急次数（Quota）
@@ -268,6 +280,11 @@ public interface WxOpenMaService extends WxMaService {
   String API_WX_APPLY_LIVE_INFO = "https://api.weixin.qq.com/wxa/business/applyliveinfo";
 
   /**
+   * 小程序认证上传补充材料
+   */
+  String API_UPLOAD_AUTH_MATERIAL = "https://api.weixin.qq.com/wxa/sec/uploadauthmaterial";
+
+  /**
    * 获得小程序的域名配置信息
    *
    * @return the domain
@@ -278,13 +295,14 @@ public interface WxOpenMaService extends WxMaService {
   /**
    * 修改域名
    * <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/Mini_Program_Basic_Info/Server_Address_Configuration.html">文档地址</a>
+   *
    * @param action           delete删除, set覆盖, get获取
    * @param requestDomains   request 合法域名；当 action 是 get 时不需要此字段
    * @param wsRequestDomains socket 合法域名；当 action 是 get 时不需要此字段
    * @param uploadDomains    uploadFile 合法域名；当 action 是 get 时不需要此字段
    * @param downloadDomains  downloadFile 合法域名；当 action 是 get 时不需要此字段
-   * @param tcpDomains tcp 合法域名；当 action 是 get 时不需要此字段
-   * @param udpDomains udp 合法域名；当 action 是 get 时不需要此字段
+   * @param tcpDomains       tcp 合法域名；当 action 是 get 时不需要此字段
+   * @param udpDomains       udp 合法域名；当 action 是 get 时不需要此字段
    * @return the wx open ma domain result
    * @throws WxErrorException the wx error exception
    */
@@ -440,6 +458,15 @@ public interface WxOpenMaService extends WxMaService {
    * @throws WxErrorException the wx error exception
    */
   File getTestQrcode(String pagePath, Map<String, String> params) throws WxErrorException;
+
+  /**
+   * 试用小程序快速认证
+   *
+   * @param verifyBetaWeappMessage the verify mini program message
+   * @return the wx open result
+   * @throws WxErrorException the wx error exception
+   */
+  WxOpenResult verifyBetaWeapp(WxOpenMaVerifyBetaWeappMessage verifyBetaWeappMessage) throws WxErrorException;
 
   /**
    * 获取授权小程序帐号的可选类目
@@ -603,6 +630,16 @@ public interface WxOpenMaService extends WxMaService {
   WxOpenMaGrayReleasePlanResult getGrayReleasePlan() throws WxErrorException;
 
   /**
+   * 17. 获取隐私接口检测结果
+   * https://developers.weixin.qq.com/doc/oplatform/openApi/OpenApiDoc/miniprogram-management/code-management/getCodePrivacyInfo.html
+   *
+   * @return {@link WxOpenMaGetCodePrivacyInfoResult }
+   * @throws WxErrorException wx错误异常
+   * @author Yuan
+   */
+  WxOpenMaGetCodePrivacyInfoResult getCodePrivacyInfo() throws WxErrorException;
+
+  /**
    * 查询服务商的当月提审限额和加急次数（Quota）
    * https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Mini_Programs/code/query_quota.html
    *
@@ -681,6 +718,20 @@ public interface WxOpenMaService extends WxMaService {
   WxOpenMaBasicService getBasicService();
 
   /**
+   * 小程序认证（年审）服务
+   *
+   * @return 小程序认证（年审）服务
+   */
+  WxOpenMaAuthService getAuthService();
+
+  /**
+   * 小程序备案服务
+   *
+   * @return 小程序备案服务
+   */
+  WxOpenMaIcpService getIcpService();
+
+  /**
    * 小程序用户隐私保护指引服务
    *
    * @return 小程序用户隐私保护指引服务
@@ -688,7 +739,17 @@ public interface WxOpenMaService extends WxMaService {
   WxOpenMaPrivacyService getPrivacyService();
 
   /**
+   * 半屏小程序服务
+   *
+   * @return {@link WxOpenMaEmbeddedService }
+   * @author Yuan
+   * @date 2024-12-04 18:42:21
+   */
+  WxOpenMaEmbeddedService getEmbeddedService();
+
+  /**
    * 购物订单
+   *
    * @return 购物订单服务
    */
   WxOpenMaShoppingOrdersService getShoppingOrdersService();
@@ -696,7 +757,7 @@ public interface WxOpenMaService extends WxMaService {
   /**
    * 小程序审核 提审素材上传接口
    *
-   * @return
+   * @return 结果
    */
   WxMaAuditMediaUploadResult uploadMedia(File file) throws WxErrorException;
 
@@ -734,5 +795,14 @@ public interface WxOpenMaService extends WxMaService {
    * @throws WxErrorException the wx error exception
    */
   WxOpenMaApplyLiveInfoResult applyLiveInfo() throws WxErrorException;
+
+  /**
+   * 小程序认证上传补充材料
+   *
+   * @return 结果
+   * @see #getAuthService() 应使用此处方法处理小程序认证相关业务
+   */
+  @Deprecated
+  WxMaUploadAuthMaterialResult uploadAuthMaterial(File file) throws WxErrorException;
 
 }

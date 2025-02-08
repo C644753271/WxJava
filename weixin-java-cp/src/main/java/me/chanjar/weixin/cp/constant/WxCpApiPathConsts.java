@@ -28,6 +28,10 @@ public interface WxCpApiPathConsts {
    */
   String GET_CALLBACK_IP = "/cgi-bin/getcallbackip";
   /**
+   * The constant GET_API_DOMAIN_IP.
+   */
+  String GET_API_DOMAIN_IP = "/cgi-bin/get_api_domain_ip";
+  /**
    * The constant BATCH_REPLACE_PARTY.
    */
   String BATCH_REPLACE_PARTY = "/cgi-bin/batch/replaceparty";
@@ -143,11 +147,19 @@ public interface WxCpApiPathConsts {
     /**
      * The constant GET_USER_DETAIL.
      */
-    String GET_USER_DETAIL = "/cgi-bin/user/getuserdetail";
+    String GET_USER_DETAIL = "/cgi-bin/auth/getuserdetail";
     /**
      * The constant URL_OAUTH2_AUTHORIZE.
      */
     String URL_OAUTH2_AUTHORIZE = "https://open.weixin.qq.com/connect/oauth2/authorize";
+    /**
+     * The constant GET_USER_INFO without agentId.
+     */
+    String GET_USER_AUTH_INFO = "/cgi-bin/auth/getuserinfo?code=%s";
+    /**
+     * The constant GET_TFA_INFO.
+     */
+    String GET_TFA_INFO = "/cgi-bin/auth/get_tfa_info";
   }
 
   /**
@@ -411,6 +423,30 @@ public interface WxCpApiPathConsts {
      * The constant MEETINGROOM_DEL.
      */
     String MEETINGROOM_DEL = "/cgi-bin/oa/meetingroom/del";
+    /**
+     * The constant MEETINGROOM_GET_BOOKING_INFO.
+     */
+    String MEETINGROOM_GET_BOOKING_INFO = "/cgi-bin/oa/meetingroom/get_booking_info";
+    /**
+     * The constant MEETINGROOM_BOOK.
+     */
+    String MEETINGROOM_BOOK = "/cgi-bin/oa/meetingroom/book";
+    /**
+     * The constant MEETINGROOM_BOOK_BY_SCHEDULE.
+     */
+    String MEETINGROOM_BOOK_BY_SCHEDULE = "/cgi-bin/oa/meetingroom/book_by_schedule";
+    /**
+     * The constant MEETINGROOM_BOOK_BY_MEETING.
+     */
+    String MEETINGROOM_BOOK_BY_MEETING = "/cgi-bin/oa/meetingroom//book_by_meeting";
+    /**
+     * The constant MEETINGROOM_CANCEL_BOOK.
+     */
+    String MEETINGROOM_CANCEL_BOOK = "/cgi-bin/oa/meetingroom/cancel_book";
+    /**
+     * The constant MEETINGROOM_BOOKINFO_GET.
+     */
+    String MEETINGROOM_BOOKINFO_GET = "/cgi-bin/oa/meetingroom/bookinfo/get";
 
     /**
      * 微盘
@@ -499,6 +535,41 @@ public interface WxCpApiPathConsts {
      * https://developer.work.weixin.qq.com/document/path/90269
      */
     String GET_OPEN_APPROVAL_DATA = "/cgi-bin/corp/getopenapprovaldata";
+
+    /**
+     * 文档
+     * https://developer.work.weixin.qq.com/document/path/97392
+     */
+    /**
+     * The constant WEDOC_CREATE_DOC.
+     */
+    String WEDOC_CREATE_DOC = "/cgi-bin/wedoc/create_doc";
+    /**
+     * The constant WEDOC_RENAME_DOC.
+     */
+    String WEDOC_RENAME_DOC = "/cgi-bin/wedoc/rename_doc";
+    /**
+     * The constant WEDOC_DEL_DOC.
+     */
+    String WEDOC_DEL_DOC = "/cgi-bin/wedoc/del_doc";
+    /**
+     * The constant WEDOC_GET_DOC_BASE_INFO.
+     */
+    String WEDOC_GET_DOC_BASE_INFO = "/cgi-bin/wedoc/get_doc_base_info";
+    /**
+     * The constant WEDOC_DOC_SHARE.
+     */
+    String WEDOC_DOC_SHARE = "/cgi-bin/wedoc/doc_share";
+
+    /**
+     * 邮件
+     * https://developer.work.weixin.qq.com/document/path/95486
+     */
+    /**
+     * The constant EXMAIL_APP_COMPOSE_SEND.
+     */
+    String EXMAIL_APP_COMPOSE_SEND = "/cgi-bin/exmail/app/compose_send";
+
   }
 
   /**
@@ -620,7 +691,7 @@ public interface WxCpApiPathConsts {
     /**
      * The constant DEPARTMENT_LIST.
      */
-    String DEPARTMENT_LIST = "/cgi-bin/school/department/list?id=";
+    String DEPARTMENT_LIST = "/cgi-bin/school/department/list";
 
     /**
      * The constant GET_PAYMENT_RESULT.
@@ -1015,6 +1086,10 @@ public interface WxCpApiPathConsts {
      */
     String GET_CONTACT_WAY = "/cgi-bin/externalcontact/get_contact_way";
     /**
+     * The constant LIST_CONTACT_WAY.
+     */
+    String LIST_CONTACT_WAY = "/cgi-bin/externalcontact/list_contact_way";
+    /**
      * The constant UPDATE_CONTACT_WAY.
      */
     String UPDATE_CONTACT_WAY = "/cgi-bin/externalcontact/update_contact_way";
@@ -1066,6 +1141,9 @@ public interface WxCpApiPathConsts {
      * The constant GET_CONTACT_DETAIL_BATCH.
      */
     String GET_CONTACT_DETAIL_BATCH = "/cgi-bin/externalcontact/batch/get_by_user?";
+
+    String GET_CONTACT_LIST = "/cgi-bin/externalcontact/contact_list?";
+
     /**
      * The constant UPDATE_REMARK.
      */
@@ -1190,6 +1268,12 @@ public interface WxCpApiPathConsts {
      * The constant GET_MOMENT_TASK_RESULT.
      */
     String GET_MOMENT_TASK_RESULT = "/cgi-bin/externalcontact/get_moment_task_result";
+
+    /**
+     * 停止发表企业朋友圈
+     */
+    String CANCEL_MOMENT_TASK = "/cgi-bin/externalcontact/cancel_moment_task";
+
     /**
      * The constant GET_MOMENT_LIST.
      */
@@ -1301,6 +1385,14 @@ public interface WxCpApiPathConsts {
      * The constant DEL_INTERCEPT_RULE.
      */
     String DEL_INTERCEPT_RULE = "/cgi-bin/externalcontact/del_intercept_rule";
+    /**
+     * 获取敏感词规则列表
+     */
+    String GET_INTERCEPT_RULE_LIST = "/cgi-bin/externalcontact/get_intercept_rule_list";
+    /**
+     * 获取敏感词规则详情
+     */
+    String GET_INTERCEPT_RULE = "/cgi-bin/externalcontact/get_intercept_rule";
     /**
      * 获取当前仍然有效的获客链接
      */

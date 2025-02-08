@@ -187,6 +187,53 @@ public class WxCpXmlMessage implements Serializable {
   @XStreamConverter(value = XStreamCDataConverter.class)
   private String taskId;
 
+  @XStreamAlias("CardType")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String cardType;
+
+  @XStreamAlias("ResponseCode")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String responseCode;
+
+  @XStreamAlias("SelectedItems")
+  private List<SelectedItem> selectedItems;
+
+  /**
+   * 微信客服
+   * 调用拉取消息接口时，需要传此token，用于校验请求的合法性
+   */
+  @XStreamAlias("Token")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String token;
+
+  /**
+   * 有新消息的客服账号。可通过sync_msg接口指定open_kfid获取此客服账号的消息
+   */
+  @XStreamAlias("OpenKfId")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String openKfId;
+
+  /**
+   * 新增授权的客服账号列表，多个AuthAddOpenKfId节点表示多个新增账号
+   */
+  @XStreamAlias("AuthAddOpenKfId")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String authAddOpenKfId;
+
+  /**
+   * 取消授权的客服账号列表，多个AuthDelOpenKfId节点表示多个取消账号
+   */
+  @XStreamAlias("AuthDelOpenKfId")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String authDelOpenKfId;
+
+  /**
+   * 失效的获客链接ID
+   */
+  @XStreamAlias("LinkId")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String linkId;
+
   /**
    * 通讯录变更事件.
    * 请参考常量 me.chanjar.weixin.cp.constant.WxCpConsts.ContactChangeType
@@ -222,6 +269,7 @@ public class WxCpXmlMessage implements Serializable {
   @XStreamAlias("WelcomeCode")
   @XStreamConverter(value = XStreamCDataConverter.class)
   private String welcomeCode;
+
   /**
    * 新的UserID，变更时推送（userid由系统生成时可更改一次）.
    */
@@ -348,6 +396,19 @@ public class WxCpXmlMessage implements Serializable {
   @XStreamAlias("CalId")
   @XStreamConverter(value = XStreamCDataConverter.class)
   private String calId;
+
+  /**
+   * 会议室ID.
+   */
+  @XStreamAlias("MeetingRoomId")
+  private String meetingRoomId;
+
+  /**
+   * 会议室预定id，可根据该ID查询具体的会议预定情况
+   */
+  @XStreamAlias("BookingId")
+  @XStreamConverter(value = XStreamCDataConverter.class)
+  private String bookingId;
 
   /**
    * 扩展属性.
@@ -698,6 +759,23 @@ public class WxCpXmlMessage implements Serializable {
     @XStreamConverter(value = XStreamCDataConverter.class)
     private String poiName;
 
+  }
+
+
+  /**
+   * The type selected Items.
+   */
+  @Data
+  @XStreamAlias("SelectedItem")
+  public static class SelectedItem implements Serializable {
+    private static final long serialVersionUID = 6319921121637597406L;
+
+    @XStreamAlias("QuestionKey")
+    @XStreamConverter(value = XStreamCDataConverter.class)
+    private String questionKey;
+
+    @XStreamAlias(value = "OptionIds")
+    private List<String> optionIds;
   }
 
 }

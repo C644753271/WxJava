@@ -1,34 +1,5 @@
 package me.chanjar.weixin.channel.api.impl;
 
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ACCOUNT_NOTIFY;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.AFTER_SALE_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.BRAND;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.COMPLAINT_NOTIFY;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.CREATE_COUPON;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.DELETE_COUPON;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.EXPIRE_COUPON;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.INVALID_COUPON;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_CANCEL;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_CONFIRM;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_DELIVER;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_EXT_INFO_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_NEW;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_PAY;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_SETTLE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.ORDER_STATUS_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.PRODUCT_CATEGORY_AUDIT;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.PRODUCT_SPU_AUDIT;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.PRODUCT_SPU_STATUS_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.PRODUCT_SPU_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.QRCODE_STATUS;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.RECEIVE_COUPON;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.SUPPLIER_ITEM_UPDATE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.UPDATE_COUPON_INFO;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.USER_COUPON_EXPIRE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.USER_COUPON_UNUSE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.USER_COUPON_USE;
-import static me.chanjar.weixin.channel.constant.MessageEventConstants.WITHDRAW_NOTIFY;
-
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.channel.api.BaseWxChannelMessageService;
@@ -52,7 +23,14 @@ import me.chanjar.weixin.channel.bean.message.order.OrderStatusMessage;
 import me.chanjar.weixin.channel.bean.message.product.BrandMessage;
 import me.chanjar.weixin.channel.bean.message.product.CategoryAuditMessage;
 import me.chanjar.weixin.channel.bean.message.product.SpuAuditMessage;
+import me.chanjar.weixin.channel.bean.message.product.SpuStockMessage;
+import me.chanjar.weixin.channel.bean.message.sharer.SharerChangeMessage;
+import me.chanjar.weixin.channel.bean.message.store.CloseStoreMessage;
+import me.chanjar.weixin.channel.bean.message.store.NicknameUpdateMessage;
 import me.chanjar.weixin.channel.bean.message.supplier.SupplierItemMessage;
+import me.chanjar.weixin.channel.bean.message.vip.ExchangeInfoMessage;
+import me.chanjar.weixin.channel.bean.message.vip.UserInfoMessage;
+import me.chanjar.weixin.channel.bean.message.voucher.VoucherMessage;
 import me.chanjar.weixin.channel.message.WxChannelMessage;
 import me.chanjar.weixin.channel.message.WxChannelMessageRouter;
 import me.chanjar.weixin.channel.message.WxChannelMessageRouterRule;
@@ -60,11 +38,13 @@ import me.chanjar.weixin.channel.message.rule.HandlerConsumer;
 import me.chanjar.weixin.channel.util.JsonUtils;
 import me.chanjar.weixin.common.session.WxSessionManager;
 
+import static me.chanjar.weixin.channel.constant.MessageEventConstants.*;
+
 /**
  * @author <a href="https://github.com/lixize">Zeyes</a>
  */
 @Slf4j
-public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageService {
+public abstract class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageService {
 
   /** 消息路由器 */
   protected WxChannelMessageRouter router;
@@ -86,6 +66,8 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
     this.addRule(SpuAuditMessage.class, PRODUCT_SPU_STATUS_UPDATE, this::spuStatusUpdate);
     /* 商品更新 */
     this.addRule(SpuAuditMessage.class, PRODUCT_SPU_UPDATE, this::spuUpdate);
+    /* 商品库存不足 */
+    this.addRule(SpuStockMessage.class, PRODUCT_STOCK_NO_ENOUGH, this::stockNoEnough);
     /* 类目审核结果 */
     this.addRule(CategoryAuditMessage.class, PRODUCT_CATEGORY_AUDIT, this::categoryAudit);
     /* 订单下单 */
@@ -94,6 +76,8 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
     this.addRule(OrderCancelMessage.class, ORDER_CANCEL, this::orderCancel);
     /* 订单支付成功 */
     this.addRule(OrderPayMessage.class, ORDER_PAY, this::orderPay);
+    /* 订单待发货 */
+    this.addRule(OrderIdMessage.class, ORDER_WAIT_SHIPPING, this::orderWaitShipping);
     /* 订单发货 */
     this.addRule(OrderDeliveryMessage.class, ORDER_DELIVER, this::orderDelivery);
     /* 订单确认收货 */
@@ -126,6 +110,8 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
     this.addRule(UserCouponExpireMessage.class, USER_COUPON_UNUSE, this::userCouponUnuse);
     /* 优惠券返还通知 */
     this.addRule(UserCouponExpireMessage.class, USER_COUPON_USE, this::userCouponUse);
+    /* 发放团购优惠成功通知 */
+    this.addRule(VoucherMessage.class, VOUCHER_SEND_SUCC, this::voucherSendSucc);
     /* 结算账户变更回调 */
     this.addRule(AccountNotifyMessage.class, ACCOUNT_NOTIFY, this::accountNotify);
     /* 提现回调 */
@@ -134,6 +120,25 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
     this.addRule(QrNotifyMessage.class, QRCODE_STATUS, this::qrNotify);
     /* 团长 */
     this.addRule(SupplierItemMessage.class, SUPPLIER_ITEM_UPDATE, this::supplierItemUpdate);
+
+    /* 用户加入会员 */
+    this.addRule(UserInfoMessage.class, USER_VIP_JOIN, false, this::vipJoin);
+    /* 用户注销会员 */
+    this.addRule(UserInfoMessage.class, USER_VIP_CLOSE,false, this::vipClose);
+    /* 用户等级信息更新 */
+    this.addRule(UserInfoMessage.class, USER_VIP_GRADE_INFO_UPDATE, false, this::vipGradeUpdate);
+    /* 用户积分更新 */
+    this.addRule(UserInfoMessage.class, USER_VIP_SCORE_UPDATE, false, this::vipScoreUpdate);
+    /* 用户积分兑换 */
+    this.addRule(ExchangeInfoMessage.class, USER_VIP_SCORE_EXCHANGE, false, this::vipScoreExchange);
+
+    /* 分享员变更 */
+    this.addRule(SharerChangeMessage.class,SHARER_CHANGE,false,this::sharerChange);
+
+    /* 小店注销 */
+    this.addRule(CloseStoreMessage.class, CLOSE_STORE, this::closeStore);
+    /* 小店修改名称 */
+    this.addRule(NicknameUpdateMessage.class, SET_SHOP_NICKNAME, this::updateNickname);
   }
 
   /**
@@ -144,15 +149,21 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
    * @param consumer 处理器
    * @param <T> 消息类型
    */
-  protected <T extends WxChannelMessage> void addRule(Class<T> clazz, String event,
-    HandlerConsumer<T, String, String, Map<String, Object>, WxSessionManager> consumer) {
+  protected <T extends WxChannelMessage> void addRule(Class<T> clazz, String event, Boolean async,
+                                                      HandlerConsumer<T, String, String, Map<String, Object>, WxSessionManager> consumer) {
     WxChannelMessageRouterRule<T> rule = new WxChannelMessageRouterRule<>();
-    rule.setMessageClass(clazz).setEvent(event).setAsync(true);
+    rule.setMessageClass(clazz).setEvent(event).setAsync(async);
     rule.getHandlers().add((message, content, appId, context, sessionManager) -> {
       consumer.accept(message, content, appId, context, sessionManager);
       return "success";
     });
+    rule.setNext(true);
     this.addRule(rule);
+  }
+
+  protected <T extends WxChannelMessage> void addRule(Class<T> clazz, String event,
+    HandlerConsumer<T, String, String, Map<String, Object>, WxSessionManager> consumer) {
+    this.addRule(clazz, event, true, consumer);
   }
 
   @Override
@@ -182,6 +193,12 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
   public void orderPay(OrderPayMessage message, String content, String appId,
     Map<String, Object> context, WxSessionManager sessionManager) {
     log.info("订单支付成功:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void orderWaitShipping(OrderIdMessage message, String content, String appId,
+    Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("订单待发货:{}", JsonUtils.encode(message));
   }
 
   @Override
@@ -230,6 +247,12 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
   public void spuUpdate(SpuAuditMessage message, String content, String appId,
     Map<String, Object> context, WxSessionManager sessionManager) {
     log.info("商品更新:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void stockNoEnough(SpuStockMessage message, String content, String appId,
+          Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("商品库存不足:{}", JsonUtils.encode(message));
   }
 
   @Override
@@ -311,6 +334,12 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
   }
 
   @Override
+  public void voucherSendSucc(VoucherMessage message, String content, String appId,
+          Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("发放团购优惠成功:{}", JsonUtils.encode(message));
+  }
+
+  @Override
   public void accountNotify(AccountNotifyMessage message, String content, String appId,
     Map<String, Object> context, WxSessionManager sessionManager) {
     log.info("账户通知:{}", JsonUtils.encode(message));
@@ -339,5 +368,52 @@ public class BaseWxChannelMessageServiceImpl implements BaseWxChannelMessageServ
     Map<String, Object> context, WxSessionManager sessionManager) {
     log.info("默认消息处理:{}", JsonUtils.encode(message));
     return null;
+  }
+
+  @Override
+  public void sharerChange(WxChannelMessage message, String content, String appId, Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("分享员变更:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void vipJoin(UserInfoMessage message, String content, String appId,
+                               Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("用户加入会员:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void vipClose(UserInfoMessage message, String content, String appId,
+                                      Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("用户注销会员:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void vipGradeUpdate(UserInfoMessage message, String content, String appId,
+                                            Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("用户等级信息更新:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void vipScoreUpdate(UserInfoMessage message, String content, String appId,
+                                            Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("用户积分更新:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void vipScoreExchange(ExchangeInfoMessage message, String content, String appId,
+                                              Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("用户积分兑换:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void closeStore(CloseStoreMessage message, String content, String appId,
+    Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("小店注销:{}", JsonUtils.encode(message));
+  }
+
+  @Override
+  public void updateNickname(NicknameUpdateMessage message, String content, String appId,
+    Map<String, Object> context, WxSessionManager sessionManager) {
+    log.info("小店修改名称:{}", JsonUtils.encode(message));
   }
 }
