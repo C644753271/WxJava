@@ -1,9 +1,6 @@
 package cn.binarywang.wx.miniapp.executor;
 
 import cn.binarywang.wx.miniapp.bean.WxMaApiResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import me.chanjar.weixin.common.enums.WxType;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.util.http.RequestHttp;
@@ -19,12 +16,16 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class ApacheApiSignaturePostRequestExecutor
     extends ApiSignaturePostRequestExecutor<CloseableHttpClient, HttpHost> {
   private static final Logger logger =
       LoggerFactory.getLogger(ApacheApiSignaturePostRequestExecutor.class);
 
-  public ApacheApiSignaturePostRequestExecutor(RequestHttp<?, ?> requestHttp) {
+  public ApacheApiSignaturePostRequestExecutor(RequestHttp<CloseableHttpClient, HttpHost> requestHttp) {
     super(requestHttp);
   }
 
@@ -64,8 +65,6 @@ public class ApacheApiSignaturePostRequestExecutor
         }
       }
       return this.handleResponse(wxType, responseContent, respHeaders);
-    } finally {
-      httpPost.releaseConnection();
     }
   }
 }
